@@ -54,7 +54,7 @@ spec:
           mountPath: "/usr/share/jenkins/ref/secrets/"
         terminationMessagePath: "/dev/termination-log"
         terminationMessagePolicy: File
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
       containers:
       - name: spinnaker-jenkins
         image: jenkins/jenkins:lts
