@@ -5,7 +5,7 @@ metadata:
   namespace: spinnaker
 spec:
   rules:
-  - host: minio.spnnaker.youxian.com
+  - host: minio.spinnaker.youxian.com
     http:
       paths:
       - path: /
