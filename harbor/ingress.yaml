@@ -1,0 +1,42 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: harbor
+spec:
+  rules:
+  - host: harbor.youxian.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: ui
+          servicePort: 8080
+      - path: /v2
+        backend:
+          serviceName: registry
+          servicePort: repo
+      - path: /service
+        backend:
+          serviceName: ui
+          servicePort: 8080
+  - host: registry.youxian.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: registry
+          servicePort: 5000
+  - host: harbor-admin.youxian.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: adminserver
+          servicePort: 8080
+  - host: harbor-job.youxian.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: jobservice
+          servicePort: 8080

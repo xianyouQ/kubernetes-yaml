@@ -1,0 +1,83 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: harbor-ui-config
+data:
+  CONFIG_PATH: /etc/ui/app.conf
+  LOG_LEVEL: debug
+  UI_SECRET: "R7rsjALOhd8D58sa"
+  JOBSERVICE_SECRET: "PbEoea93IwCIc21a"
+  GODEBUG: netdns=cgo
+  SECRET_KEY: "OePtDG1rgBI5xFra"
+  JobServiceURL: harbor-job.youxian.com
+  ADMINSERVER_URL: harbor-admin.youxian.com
+  config: |
+    appname = registry
+    runmode = dev
+    [lang]
+    types = en-US|zh-CN
+    names = en-US|zh-CN
+    [dev]
+    httpport = 8080
+    [mail]
+    host = smtp.mydomain.com
+    port = 25
+    username = sample_admin@mydomain.com
+    password = abc
+    from = admin <sample_admin@mydomain.com>
+    ssl = false
+  pkey: |
+    -----BEGIN RSA PRIVATE KEY-----
+    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
+    -----END RSA PRIVATE KEY-----
+    
+
+

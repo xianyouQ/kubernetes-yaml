@@ -1,0 +1,25 @@
+kind: ReplicationController
+apiVersion: v1
+metadata:
+  labels:
+    app: kubernetes-dashboard
+  name: kubernetes-dashboard
+  namespace: kube-system
+spec:
+  replicas: 1
+  selector:
+      app: kubernetes-dashboard
+  template:
+    metadata:
+      labels:
+        app: kubernetes-dashboard
+    spec:
+      containers:
+      - name: kubernetes-dashboard
+        image: registry.cn-hangzhou.aliyuncs.com/google-containers/kubernetes-dashboard-amd64:v1.7.1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        args:
+        - --apiserver-host=http://kube-api.youxian.com:8080
+      serviceAccountName: kubernetes-dashboard

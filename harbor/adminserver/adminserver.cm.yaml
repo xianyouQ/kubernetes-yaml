@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: harbor-adminserver-config
+data:
+  LOG_LEVEL: debug
+  AUTH_MODE: db_auth
+  SELF_REGISTRATION: "on"
+  LDAP_URL: ldaps://ldap.mydomain.com
+  LDAP_SEARCH_DN: ""
+  LDAP_SEARCH_PWD: ""
+  LDAP_BASE_DN: "ou=people,dc=mydomain,dc=com"
+  LDAP_FILTER: ""
+  LDAP_UID: uid
+  LDAP_SCOPE: "3"
+  LDAP_TIMEOUT: "5"
+  DATABASE_TYPE: mysql
+  MYSQL_HOST: mysql.youxian.com
+  MYSQL_PORT: "3306"
+  MYSQL_USR: root
+  MYSQL_PWD: "root123"
+  MYSQL_DATABASE: registry
+  REGISTRY_URL: http://registry.youxian.com:80
+  TOKEN_SERVICE_URL: http://harbor.youxian.com/service/token
+  EMAIL_HOST: smtp.mydomain.com
+  EMAIL_PORT: "25"
+  EMAIL_USR: sample_admin@mydomain.com
+  EMAIL_PWD: abc
+  EMAIL_SSL: "false"
+  CLAIR_DB_PORT: "0"
+  EMAIL_FROM: "admin <sample_admin@mydomain.com>"
+  EMAIL_IDENTITY: ""
+  HARBOR_ADMIN_PASSWORD: "Harbor12345"
+  PROJECT_CREATION_RESTRICTION: everyone
+  VERIFY_REMOTE_CERT: "on"
+  MAX_JOB_WORKERS: "3"
+  UI_SECRET: "R7rsjALOhd8D58sa"
+  JOBSERVICE_SECRET: "PbEoea93IwCIc21a"
+  TOKEN_EXPIRATION: "30"
+  CFG_EXPIRATION: "5"
+  GODEBUG: "netdns=cgo"
+  ADMIRAL_URL: NA
+  WITH_NOTARY: "False"
+  RESET: "false"
+  EXT_ENDPOINT: "http://harbor.youxian.com"
+  TOKEN_URL: http://harbor.youxian.com/ui
+  JSON_CFG_STORE_PATH: "/etc/config/config.json"
+  SECRET_KEY: "OePtDG1rgBI5xFra"
+  PORT: "8080"
