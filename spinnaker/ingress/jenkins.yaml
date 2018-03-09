@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: jenkins-ingress
+  namespace: spinnaker
+spec:
+  rules:
+  - host: jenkins.spnnaker.youxian.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: spinnaker-jenkins
+          servicePort: 8080
