@@ -1,0 +1,35 @@
+{
+  "kind": "Service",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "spinnaker-spinnaker-front50",
+    "namespace": "spinnaker",
+    "selfLink": "/api/v1/namespaces/spinnaker/services/spinnaker-spinnaker-front50",
+    "uid": "95bd3d91-2346-11e8-baf7-06dec40001b5",
+    "resourceVersion": "143658",
+    "creationTimestamp": "2018-03-09T03:04:30Z",
+    "labels": {
+      "app": "spinnaker-spinnaker",
+      "component": "front50"
+    }
+  },
+  "spec": {
+    "ports": [
+      {
+        "protocol": "TCP",
+        "port": 8080,
+        "targetPort": 8080
+      }
+    ],
+    "selector": {
+      "app": "spinnaker-spinnaker",
+      "component": "front50"
+    },
+    "clusterIP": "192.168.177.229",
+    "type": "ClusterIP",
+    "sessionAffinity": "None"
+  },
+  "status": {
+    "loadBalancer": {}
+  }
+}

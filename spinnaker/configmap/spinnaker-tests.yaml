@@ -1,0 +1,15 @@
+{
+  "kind": "ConfigMap",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "spinnaker-spinnaker-tests",
+    "namespace": "spinnaker",
+    "selfLink": "/api/v1/namespaces/spinnaker/configmaps/spinnaker-spinnaker-tests",
+    "uid": "95b5899f-2346-11e8-baf7-06dec40001b5",
+    "resourceVersion": "143629",
+    "creationTimestamp": "2018-03-09T03:04:30Z"
+  },
+  "data": {
+    "run.sh": "@test \"Testing Spinnaker UI is accessible\" {\n  curl --retry 12 --retry-delay 10 spinnaker-spinnaker-deck:9000\n}"
+  }
+}

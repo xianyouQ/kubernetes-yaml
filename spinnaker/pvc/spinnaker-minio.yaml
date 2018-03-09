@@ -1,0 +1,36 @@
+{
+  "kind": "PersistentVolumeClaim",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "spinnaker-minio",
+    "namespace": "spinnaker",
+    "selfLink": "/api/v1/namespaces/spinnaker/persistentvolumeclaims/spinnaker-minio",
+    "uid": "95b74a04-2346-11e8-baf7-06dec40001b5",
+    "resourceVersion": "143974",
+    "creationTimestamp": "2018-03-09T03:04:30Z",
+    "annotations": {
+      "pv.kubernetes.io/bind-completed": "yes",
+      "pv.kubernetes.io/bound-by-controller": "yes"
+    }
+  },
+  "spec": {
+    "accessModes": [
+      "ReadWriteOnce"
+    ],
+    "resources": {
+      "requests": {
+        "storage": "10Gi"
+      }
+    },
+    "volumeName": "minio-pv"
+  },
+  "status": {
+    "phase": "Bound",
+    "accessModes": [
+      "ReadWriteOnce"
+    ],
+    "capacity": {
+      "storage": "10Gi"
+    }
+  }
+}

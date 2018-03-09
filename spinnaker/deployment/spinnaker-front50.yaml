@@ -1,0 +1,126 @@
+{
+  "kind": "Deployment",
+  "apiVersion": "extensions/v1beta1",
+  "metadata": {
+    "name": "spinnaker-spinnaker-front50",
+    "namespace": "spinnaker",
+    "selfLink": "/apis/extensions/v1beta1/namespaces/spinnaker/deployments/spinnaker-spinnaker-front50",
+    "uid": "95c63b58-2346-11e8-baf7-06dec40001b5",
+    "resourceVersion": "143826",
+    "generation": 1,
+    "creationTimestamp": "2018-03-09T03:04:30Z",
+    "labels": {
+      "app": "spinnaker-spinnaker",
+      "component": "front50"
+    },
+    "annotations": {
+      "deployment.kubernetes.io/revision": "1"
+    }
+  },
+  "spec": {
+    "replicas": 1,
+    "selector": {
+      "matchLabels": {
+        "app": "spinnaker-spinnaker",
+        "component": "front50"
+      }
+    },
+    "template": {
+      "metadata": {
+        "creationTimestamp": null,
+        "labels": {
+          "app": "spinnaker-spinnaker",
+          "component": "front50"
+        },
+        "annotations": {
+          "checksum/config": "9f6777e4578dcb8f3083ce1e514eb789d126b2e26837ea97cd6cf8f7d6e03462"
+        }
+      },
+      "spec": {
+        "volumes": [
+          {
+            "name": "spinnaker-spinnaker-spinnaker-config",
+            "configMap": {
+              "name": "spinnaker-spinnaker-spinnaker-config",
+              "defaultMode": 420
+            }
+          },
+          {
+            "name": "spinnaker-spinnaker-s3-config",
+            "configMap": {
+              "name": "spinnaker-spinnaker-s3-config",
+              "defaultMode": 420
+            }
+          }
+        ],
+        "containers": [
+          {
+            "name": "front50",
+            "image": "gcr.io/spinnaker-marketplace/front50:0.9.0-20180221133510",
+            "ports": [
+              {
+                "name": "front50",
+                "containerPort": 8080,
+                "protocol": "TCP"
+              }
+            ],
+            "resources": {},
+            "volumeMounts": [
+              {
+                "name": "spinnaker-spinnaker-spinnaker-config",
+                "mountPath": "/opt/spinnaker/config"
+              },
+              {
+                "name": "spinnaker-spinnaker-s3-config",
+                "mountPath": "/root/.aws"
+              }
+            ],
+            "readinessProbe": {
+              "httpGet": {
+                "path": "/health",
+                "port": 8080,
+                "scheme": "HTTP"
+              },
+              "initialDelaySeconds": 20,
+              "timeoutSeconds": 1,
+              "periodSeconds": 10,
+              "successThreshold": 1,
+              "failureThreshold": 3
+            },
+            "terminationMessagePath": "/dev/termination-log",
+            "terminationMessagePolicy": "File",
+            "imagePullPolicy": "IfNotPresent"
+          }
+        ],
+        "restartPolicy": "Always",
+        "terminationGracePeriodSeconds": 30,
+        "dnsPolicy": "ClusterFirst",
+        "securityContext": {},
+        "schedulerName": "default-scheduler"
+      }
+    },
+    "strategy": {
+      "type": "RollingUpdate",
+      "rollingUpdate": {
+        "maxUnavailable": 0,
+        "maxSurge": 1
+      }
+    }
+  },
+  "status": {
+    "observedGeneration": 1,
+    "replicas": 1,
+    "updatedReplicas": 1,
+    "unavailableReplicas": 1,
+    "conditions": [
+      {
+        "type": "Available",
+        "status": "False",
+        "lastUpdateTime": "2018-03-09T03:04:30Z",
+        "lastTransitionTime": "2018-03-09T03:04:30Z",
+        "reason": "MinimumReplicasUnavailable",
+        "message": "Deployment does not have minimum availability."
+      }
+    ]
+  }
+}

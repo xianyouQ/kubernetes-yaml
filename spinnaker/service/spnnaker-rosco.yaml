@@ -1,0 +1,35 @@
+{
+  "kind": "Service",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "spinnaker-spinnaker-rosco",
+    "namespace": "spinnaker",
+    "selfLink": "/api/v1/namespaces/spinnaker/services/spinnaker-spinnaker-rosco",
+    "uid": "95bf7060-2346-11e8-baf7-06dec40001b5",
+    "resourceVersion": "143670",
+    "creationTimestamp": "2018-03-09T03:04:30Z",
+    "labels": {
+      "app": "spinnaker-spinnaker",
+      "component": "rosco"
+    }
+  },
+  "spec": {
+    "ports": [
+      {
+        "protocol": "TCP",
+        "port": 8087,
+        "targetPort": 8087
+      }
+    ],
+    "selector": {
+      "app": "spinnaker-spinnaker",
+      "component": "rosco"
+    },
+    "clusterIP": "192.168.177.37",
+    "type": "ClusterIP",
+    "sessionAffinity": "None"
+  },
+  "status": {
+    "loadBalancer": {}
+  }
+}

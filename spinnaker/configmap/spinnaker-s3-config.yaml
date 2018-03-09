@@ -1,0 +1,18 @@
+{
+  "kind": "ConfigMap",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "spinnaker-spinnaker-s3-config",
+    "namespace": "spinnaker",
+    "selfLink": "/api/v1/namespaces/spinnaker/configmaps/spinnaker-spinnaker-s3-config",
+    "uid": "95b48623-2346-11e8-baf7-06dec40001b5",
+    "resourceVersion": "143627",
+    "creationTimestamp": "2018-03-09T03:04:30Z",
+    "labels": {
+      "app": "spinnaker-spinnaker"
+    }
+  },
+  "data": {
+    "credentials": "[default]\naws_access_key_id=spinnakeradmin\naws_secret_access_key=spinnakeradmin\n"
+  }
+}

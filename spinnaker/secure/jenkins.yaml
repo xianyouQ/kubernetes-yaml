@@ -1,0 +1,23 @@
+{
+  "kind": "Secret",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "spinnaker-jenkins",
+    "namespace": "spinnaker",
+    "selfLink": "/api/v1/namespaces/spinnaker/secrets/spinnaker-jenkins",
+    "uid": "95b1d9a6-2346-11e8-baf7-06dec40001b5",
+    "resourceVersion": "143619",
+    "creationTimestamp": "2018-03-09T03:04:30Z",
+    "labels": {
+      "app": "spinnaker-jenkins",
+      "chart": "jenkins-0.14.0",
+      "heritage": "Tiller",
+      "release": "spinnaker"
+    }
+  },
+  "data": {
+    "jenkins-admin-password": "VEdZN0hhOUNtdg==",
+    "jenkins-admin-user": "YWRtaW4="
+  },
+  "type": "Opaque"
+}

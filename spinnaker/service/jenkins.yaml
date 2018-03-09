@@ -1,0 +1,38 @@
+{
+  "kind": "Service",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "spinnaker-jenkins",
+    "namespace": "spinnaker",
+    "selfLink": "/api/v1/namespaces/spinnaker/services/spinnaker-jenkins",
+    "uid": "95b8a102-2346-11e8-baf7-06dec40001b5",
+    "resourceVersion": "143640",
+    "creationTimestamp": "2018-03-09T03:04:30Z",
+    "labels": {
+      "app": "spinnaker-jenkins",
+      "chart": "jenkins-0.14.0",
+      "component": "spinnaker-jenkins-master",
+      "heritage": "Tiller",
+      "release": "spinnaker"
+    }
+  },
+  "spec": {
+    "ports": [
+      {
+        "name": "http",
+        "protocol": "TCP",
+        "port": 8080,
+        "targetPort": 8080
+      }
+    ],
+    "selector": {
+      "component": "spinnaker-jenkins-master"
+    },
+    "clusterIP": "192.168.177.2",
+    "type": "ClusterIP",
+    "sessionAffinity": "None"
+  },
+  "status": {
+    "loadBalancer": {}
+  }
+}

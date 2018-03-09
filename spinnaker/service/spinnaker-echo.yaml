@@ -1,0 +1,35 @@
+{
+  "kind": "Service",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "spinnaker-spinnaker-echo",
+    "namespace": "spinnaker",
+    "selfLink": "/api/v1/namespaces/spinnaker/services/spinnaker-spinnaker-echo",
+    "uid": "95bcb10a-2346-11e8-baf7-06dec40001b5",
+    "resourceVersion": "143655",
+    "creationTimestamp": "2018-03-09T03:04:30Z",
+    "labels": {
+      "app": "spinnaker-spinnaker",
+      "component": "echo"
+    }
+  },
+  "spec": {
+    "ports": [
+      {
+        "protocol": "TCP",
+        "port": 8089,
+        "targetPort": 8089
+      }
+    ],
+    "selector": {
+      "app": "spinnaker-spinnaker",
+      "component": "echo"
+    },
+    "clusterIP": "192.168.177.245",
+    "type": "ClusterIP",
+    "sessionAffinity": "None"
+  },
+  "status": {
+    "loadBalancer": {}
+  }
+}

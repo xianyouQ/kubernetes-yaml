@@ -1,0 +1,37 @@
+{
+  "kind": "Service",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "spinnaker-minio-svc",
+    "namespace": "spinnaker",
+    "selfLink": "/api/v1/namespaces/spinnaker/services/spinnaker-minio-svc",
+    "uid": "95b9667b-2346-11e8-baf7-06dec40001b5",
+    "resourceVersion": "143643",
+    "creationTimestamp": "2018-03-09T03:04:30Z",
+    "labels": {
+      "app": "spinnaker-minio",
+      "chart": "minio-0.5.5",
+      "heritage": "Tiller",
+      "release": "spinnaker"
+    }
+  },
+  "spec": {
+    "ports": [
+      {
+        "name": "service",
+        "protocol": "TCP",
+        "port": 9000,
+        "targetPort": 9000
+      }
+    ],
+    "selector": {
+      "app": "spinnaker-minio"
+    },
+    "clusterIP": "192.168.177.96",
+    "type": "ClusterIP",
+    "sessionAffinity": "None"
+  },
+  "status": {
+    "loadBalancer": {}
+  }
+}

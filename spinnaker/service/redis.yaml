@@ -1,0 +1,37 @@
+{
+  "kind": "Service",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "spinnaker-redis",
+    "namespace": "spinnaker",
+    "selfLink": "/api/v1/namespaces/spinnaker/services/spinnaker-redis",
+    "uid": "95b9f635-2346-11e8-baf7-06dec40001b5",
+    "resourceVersion": "143646",
+    "creationTimestamp": "2018-03-09T03:04:30Z",
+    "labels": {
+      "app": "spinnaker-redis",
+      "chart": "redis-1.1.17",
+      "heritage": "Tiller",
+      "release": "spinnaker"
+    }
+  },
+  "spec": {
+    "ports": [
+      {
+        "name": "redis",
+        "protocol": "TCP",
+        "port": 6379,
+        "targetPort": "redis"
+      }
+    ],
+    "selector": {
+      "app": "spinnaker-redis"
+    },
+    "clusterIP": "192.168.177.130",
+    "type": "ClusterIP",
+    "sessionAffinity": "None"
+  },
+  "status": {
+    "loadBalancer": {}
+  }
+}

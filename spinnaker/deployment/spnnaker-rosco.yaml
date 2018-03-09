@@ -1,0 +1,137 @@
+{
+  "kind": "Deployment",
+  "apiVersion": "extensions/v1beta1",
+  "metadata": {
+    "name": "spinnaker-spinnaker-rosco",
+    "namespace": "spinnaker",
+    "selfLink": "/apis/extensions/v1beta1/namespaces/spinnaker/deployments/spinnaker-spinnaker-rosco",
+    "uid": "95cd84af-2346-11e8-baf7-06dec40001b5",
+    "resourceVersion": "143850",
+    "generation": 1,
+    "creationTimestamp": "2018-03-09T03:04:30Z",
+    "labels": {
+      "app": "spinnaker-spinnaker",
+      "component": "rosco"
+    },
+    "annotations": {
+      "deployment.kubernetes.io/revision": "1"
+    }
+  },
+  "spec": {
+    "replicas": 1,
+    "selector": {
+      "matchLabels": {
+        "app": "spinnaker-spinnaker",
+        "component": "rosco"
+      }
+    },
+    "template": {
+      "metadata": {
+        "creationTimestamp": null,
+        "labels": {
+          "app": "spinnaker-spinnaker",
+          "component": "rosco"
+        },
+        "annotations": {
+          "checksum/config": "9f6777e4578dcb8f3083ce1e514eb789d126b2e26837ea97cd6cf8f7d6e03462"
+        }
+      },
+      "spec": {
+        "volumes": [
+          {
+            "name": "spinnaker-spinnaker-spinnaker-config",
+            "configMap": {
+              "name": "spinnaker-spinnaker-spinnaker-config",
+              "defaultMode": 420
+            }
+          },
+          {
+            "name": "docker-bin",
+            "hostPath": {
+              "path": "/usr/bin/docker",
+              "type": ""
+            }
+          },
+          {
+            "name": "docker-sock",
+            "hostPath": {
+              "path": "/var/run/docker.sock",
+              "type": ""
+            }
+          }
+        ],
+        "containers": [
+          {
+            "name": "rosco",
+            "image": "gcr.io/spinnaker-marketplace/rosco:0.5.0-20180221133510",
+            "ports": [
+              {
+                "name": "rosco",
+                "containerPort": 8087,
+                "protocol": "TCP"
+              }
+            ],
+            "resources": {},
+            "volumeMounts": [
+              {
+                "name": "spinnaker-spinnaker-spinnaker-config",
+                "mountPath": "/opt/spinnaker/config"
+              },
+              {
+                "name": "docker-bin",
+                "mountPath": "/usr/bin/docker"
+              },
+              {
+                "name": "docker-sock",
+                "mountPath": "/var/run/docker.sock"
+              }
+            ],
+            "readinessProbe": {
+              "httpGet": {
+                "path": "/health",
+                "port": 8087,
+                "scheme": "HTTP"
+              },
+              "initialDelaySeconds": 20,
+              "timeoutSeconds": 1,
+              "periodSeconds": 10,
+              "successThreshold": 1,
+              "failureThreshold": 3
+            },
+            "terminationMessagePath": "/dev/termination-log",
+            "terminationMessagePolicy": "File",
+            "imagePullPolicy": "IfNotPresent"
+          }
+        ],
+        "restartPolicy": "Always",
+        "terminationGracePeriodSeconds": 30,
+        "dnsPolicy": "ClusterFirst",
+        "securityContext": {},
+        "schedulerName": "default-scheduler"
+      }
+    },
+    "strategy": {
+      "type": "RollingUpdate",
+      "rollingUpdate": {
+        "maxUnavailable": 0,
+        "maxSurge": 1
+      }
+    }
+  },
+  "status": {
+    "observedGeneration": 1,
+    "replicas": 1,
+    "updatedReplicas": 1,
+    "unavailableReplicas": 1,
+    "conditions": [
+      {
+        "type": "Available",
+        "status": "False",
+        "lastUpdateTime": "2018-03-09T03:04:31Z",
+        "lastTransitionTime": "2018-03-09T03:04:31Z",
+        "reason": "MinimumReplicasUnavailable",
+        "message": "Deployment does not have minimum availability."
+      }
+    ]
+  }
+}

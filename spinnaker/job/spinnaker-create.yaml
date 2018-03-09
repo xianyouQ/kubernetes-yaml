@@ -1,0 +1,66 @@
+{
+  "kind": "Job",
+  "apiVersion": "batch/v1",
+  "metadata": {
+    "name": "spinnaker-create-bucket",
+    "namespace": "spinnaker",
+    "selfLink": "/apis/batch/v1/namespaces/spinnaker/jobs/spinnaker-create-bucket",
+    "uid": "95d2ca2d-2346-11e8-baf7-06dec40001b5",
+    "resourceVersion": "143755",
+    "creationTimestamp": "2018-03-09T03:04:30Z",
+    "labels": {
+      "app": "spinnaker-spinnaker",
+      "component": "minio"
+    },
+    "annotations": {
+      "helm.sh/hook": "post-install"
+    }
+  },
+  "spec": {
+    "parallelism": 1,
+    "completions": 1,
+    "backoffLimit": 6,
+    "selector": {
+      "matchLabels": {
+        "controller-uid": "95d2ca2d-2346-11e8-baf7-06dec40001b5"
+      }
+    },
+    "template": {
+      "metadata": {
+        "creationTimestamp": null,
+        "labels": {
+          "app": "spinnaker-spinnaker",
+          "component": "minio",
+          "controller-uid": "95d2ca2d-2346-11e8-baf7-06dec40001b5",
+          "job-name": "spinnaker-create-bucket"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "name": "post-install-job",
+            "image": "viglesiasce/minio-client:v0.4.0",
+            "command": [
+              "sh",
+              "-c",
+              "mc config host add spinnaker-minio http://spinnaker-minio-svc:9000 spinnakeradmin spinnakeradmin S3v4 &&  mc mb spinnaker-minio/spinnaker"
+            ],
+            "resources": {},
+            "terminationMessagePath": "/dev/termination-log",
+            "terminationMessagePolicy": "File",
+            "imagePullPolicy": "IfNotPresent"
+          }
+        ],
+        "restartPolicy": "OnFailure",
+        "terminationGracePeriodSeconds": 30,
+        "dnsPolicy": "ClusterFirst",
+        "securityContext": {},
+        "schedulerName": "default-scheduler"
+      }
+    }
+  },
+  "status": {
+    "startTime": "2018-03-09T03:04:30Z",
+    "active": 1
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "kind": "Service",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "spinnaker-spinnaker-igor",
+    "namespace": "spinnaker",
+    "selfLink": "/api/v1/namespaces/spinnaker/services/spinnaker-spinnaker-igor",
+    "uid": "95be41c7-2346-11e8-baf7-06dec40001b5",
+    "resourceVersion": "143664",
+    "creationTimestamp": "2018-03-09T03:04:30Z",
+    "labels": {
+      "app": "spinnaker-spinnaker",
+      "component": "igor"
+    }
+  },
+  "spec": {
+    "ports": [
+      {
+        "name": "igor",
+        "protocol": "TCP",
+        "port": 8088,
+        "targetPort": 8088
+      },
+      {
+        "name": "jenkins-master",
+        "protocol": "TCP",
+        "port": 8080,
+        "targetPort": 8080
+      },
+      {
+        "name": "jenkins-agent",
+        "protocol": "TCP",
+        "port": 50000,
+        "targetPort": 50000
+      }
+    ],
+    "selector": {
+      "app": "spinnaker-spinnaker",
+      "component": "igor"
+    },
+    "clusterIP": "192.168.177.80",
+    "type": "ClusterIP",
+    "sessionAffinity": "None"
+  },
+  "status": {
+    "loadBalancer": {}
+  }
+}

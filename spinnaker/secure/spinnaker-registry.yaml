@@ -1,0 +1,20 @@
+{
+  "kind": "Secret",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "spinnaker-spinnaker-registry",
+    "namespace": "spinnaker",
+    "selfLink": "/api/v1/namespaces/spinnaker/secrets/spinnaker-spinnaker-registry",
+    "uid": "95b2e26c-2346-11e8-baf7-06dec40001b5",
+    "resourceVersion": "143622",
+    "creationTimestamp": "2018-03-09T03:04:30Z",
+    "labels": {
+      "app": "spinnaker-spinnaker",
+      "component": "clouddriver"
+    }
+  },
+  "data": {
+    "password-dockerhub": ""
+  },
+  "type": "Opaque"
+}

@@ -1,0 +1,23 @@
+{
+  "kind": "Secret",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "spinnaker-minio-user",
+    "namespace": "spinnaker",
+    "selfLink": "/api/v1/namespaces/spinnaker/secrets/spinnaker-minio-user",
+    "uid": "95b25069-2346-11e8-baf7-06dec40001b5",
+    "resourceVersion": "143620",
+    "creationTimestamp": "2018-03-09T03:04:30Z",
+    "labels": {
+      "app": "spinnaker-minio",
+      "chart": "minio-0.5.5",
+      "heritage": "Tiller",
+      "release": "spinnaker"
+    }
+  },
+  "data": {
+    "accesskey": "c3Bpbm5ha2VyYWRtaW4=",
+    "secretkey": "c3Bpbm5ha2VyYWRtaW4="
+  },
+  "type": "Opaque"
+}

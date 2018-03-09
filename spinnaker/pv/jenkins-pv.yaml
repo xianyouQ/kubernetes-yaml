@@ -1,0 +1,38 @@
+{
+  "kind": "PersistentVolume",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "jenkins-pv",
+    "selfLink": "/api/v1/persistentvolumes/jenkins-pv",
+    "uid": "a911789b-2346-11e8-baf7-06dec40001b5",
+    "resourceVersion": "143936",
+    "creationTimestamp": "2018-03-09T03:05:02Z",
+    "annotations": {
+      "pv.kubernetes.io/bound-by-controller": "yes"
+    }
+  },
+  "spec": {
+    "capacity": {
+      "storage": "8Gi"
+    },
+    "hostPath": {
+      "path": "/home/jenkins",
+      "type": ""
+    },
+    "accessModes": [
+      "ReadWriteOnce"
+    ],
+    "claimRef": {
+      "kind": "PersistentVolumeClaim",
+      "namespace": "spinnaker",
+      "name": "spinnaker-jenkins",
+      "uid": "95b6f08b-2346-11e8-baf7-06dec40001b5",
+      "apiVersion": "v1",
+      "resourceVersion": "143630"
+    },
+    "persistentVolumeReclaimPolicy": "Retain"
+  },
+  "status": {
+    "phase": "Bound"
+  }
+}
