@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: orca-ingress
+  namespace: spinnaker
+spec:
+  rules:
+  - host: orca.spnnaker.youxian.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: spinnaker-spinnaker-orca
+          servicePort: 8083

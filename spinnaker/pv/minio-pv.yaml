@@ -1,38 +1,23 @@
-{
-  "kind": "PersistentVolume",
-  "apiVersion": "v1",
-  "metadata": {
-    "name": "minio-pv",
-    "selfLink": "/api/v1/persistentvolumes/minio-pv",
-    "uid": "b2530f80-2346-11e8-baf7-06dec40001b5",
-    "resourceVersion": "143972",
-    "creationTimestamp": "2018-03-09T03:05:18Z",
-    "annotations": {
-      "pv.kubernetes.io/bound-by-controller": "yes"
-    }
-  },
-  "spec": {
-    "capacity": {
-      "storage": "10Gi"
-    },
-    "hostPath": {
-      "path": "/home/minio",
-      "type": ""
-    },
-    "accessModes": [
-      "ReadWriteOnce"
-    ],
-    "claimRef": {
-      "kind": "PersistentVolumeClaim",
-      "namespace": "spinnaker",
-      "name": "spinnaker-minio",
-      "uid": "95b74a04-2346-11e8-baf7-06dec40001b5",
-      "apiVersion": "v1",
-      "resourceVersion": "143631"
-    },
-    "persistentVolumeReclaimPolicy": "Retain"
-  },
-  "status": {
-    "phase": "Bound"
-  }
-}
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: minio-pv
+  annotations:
+    pv.kubernetes.io/bound-by-controller: 'yes'
+spec:
+  capacity:
+    storage: 10Gi
+  hostPath:
+    path: "/home/minio"
+    type: ''
+  accessModes:
+  - ReadWriteOnce
+  claimRef:
+    kind: PersistentVolumeClaim
+    namespace: spinnaker
+    name: spinnaker-minio
+    uid: 95b74a04-2346-11e8-baf7-06dec40001b5
+    apiVersion: v1
+    resourceVersion: '143631'
+  persistentVolumeReclaimPolicy: Retain

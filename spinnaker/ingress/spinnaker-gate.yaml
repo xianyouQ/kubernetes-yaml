@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: gate-ingress
+  namespace: spinnaker
+spec:
+  rules:
+  - host: gate.spnnaker.youxian.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: spinnaker-spinnaker-gate
+          servicePort: 8084

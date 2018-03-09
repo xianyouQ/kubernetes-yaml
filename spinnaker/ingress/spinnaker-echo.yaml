@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: echo-ingress
+  namespace: spinnaker
+spec:
+  rules:
+  - host: echo.spnnaker.youxian.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: spinnaker-spinnaker-echo
+          servicePort: 8089

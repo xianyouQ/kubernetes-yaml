@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: front50-ingress
+  namespace: spinnaker
+spec:
+  rules:
+  - host: front50.spnnaker.youxian.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: spinnaker-spinnaker-front50
+          servicePort: 8080

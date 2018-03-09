@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: deck-ingress
+  namespace: spinnaker
+spec:
+  rules:
+  - host: deck.spnnaker.youxian.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: spinnaker-spinnaker-deck
+          servicePort: 7002

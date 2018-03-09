@@ -1,118 +1,58 @@
-{
-  "kind": "Deployment",
-  "apiVersion": "extensions/v1beta1",
-  "metadata": {
-    "name": "spinnaker-spinnaker-deck",
-    "namespace": "spinnaker",
-    "selfLink": "/apis/extensions/v1beta1/namespaces/spinnaker/deployments/spinnaker-spinnaker-deck",
-    "uid": "95c3b293-2346-11e8-baf7-06dec40001b5",
-    "resourceVersion": "143862",
-    "generation": 1,
-    "creationTimestamp": "2018-03-09T03:04:30Z",
-    "labels": {
-      "app": "spinnaker-spinnaker",
-      "component": "deck"
-    },
-    "annotations": {
-      "deployment.kubernetes.io/revision": "1"
-    }
-  },
-  "spec": {
-    "replicas": 1,
-    "selector": {
-      "matchLabels": {
-        "app": "spinnaker-spinnaker",
-        "component": "deck"
-      }
-    },
-    "template": {
-      "metadata": {
-        "creationTimestamp": null,
-        "labels": {
-          "app": "spinnaker-spinnaker",
-          "component": "deck"
-        },
-        "annotations": {
-          "checksum/config": "9f6777e4578dcb8f3083ce1e514eb789d126b2e26837ea97cd6cf8f7d6e03462"
-        }
-      },
-      "spec": {
-        "volumes": [
-          {
-            "name": "spinnaker-spinnaker-spinnaker-config",
-            "configMap": {
-              "name": "spinnaker-spinnaker-spinnaker-config",
-              "defaultMode": 420
-            }
-          }
-        ],
-        "containers": [
-          {
-            "name": "deck",
-            "image": "gcr.io/spinnaker-marketplace/deck:2.1.0-20180221143146",
-            "ports": [
-              {
-                "name": "deck",
-                "containerPort": 9000,
-                "protocol": "TCP"
-              }
-            ],
-            "env": [
-              {
-                "name": "API_HOST",
-                "value": "http://spinnaker-spinnaker-gate:8084/"
-              },
-              {
-                "name": "DECK_HOST",
-                "value": "0.0.0.0"
-              },
-              {
-                "name": "DECK_PORT",
-                "value": "9000"
-              }
-            ],
-            "resources": {},
-            "volumeMounts": [
-              {
-                "name": "spinnaker-spinnaker-spinnaker-config",
-                "mountPath": "/opt/spinnaker/config"
-              }
-            ],
-            "terminationMessagePath": "/dev/termination-log",
-            "terminationMessagePolicy": "File",
-            "imagePullPolicy": "IfNotPresent"
-          }
-        ],
-        "restartPolicy": "Always",
-        "terminationGracePeriodSeconds": 30,
-        "dnsPolicy": "ClusterFirst",
-        "securityContext": {},
-        "schedulerName": "default-scheduler"
-      }
-    },
-    "strategy": {
-      "type": "RollingUpdate",
-      "rollingUpdate": {
-        "maxUnavailable": 0,
-        "maxSurge": 1
-      }
-    }
-  },
-  "status": {
-    "observedGeneration": 1,
-    "replicas": 1,
-    "updatedReplicas": 1,
-    "readyReplicas": 1,
-    "availableReplicas": 1,
-    "conditions": [
-      {
-        "type": "Available",
-        "status": "True",
-        "lastUpdateTime": "2018-03-09T03:04:33Z",
-        "lastTransitionTime": "2018-03-09T03:04:33Z",
-        "reason": "MinimumReplicasAvailable",
-        "message": "Deployment has minimum availability."
-      }
-    ]
-  }
-}
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: spinnaker-spinnaker-deck
+  namespace: spinnaker
+  labels:
+    app: spinnaker-spinnaker
+    component: deck
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spinnaker-spinnaker
+      component: deck
+  template:
+    metadata:
+      creationTimestamp: 
+      labels:
+        app: spinnaker-spinnaker
+        component: deck
+    spec:
+      volumes:
+      - name: spinnaker-spinnaker-spinnaker-config
+        configMap:
+          name: spinnaker-spinnaker-spinnaker-config
+          defaultMode: 420
+      containers:
+      - name: deck
+        image: gcr.io/spinnaker-marketplace/deck:2.1.0-20180221143146
+        ports:
+        - name: deck
+          containerPort: 9000
+          protocol: TCP
+        env:
+        - name: API_HOST
+          value: http://spinnaker-spinnaker-gate:8084/
+        - name: DECK_HOST
+          value: 0.0.0.0
+        - name: DECK_PORT
+          value: '9000'
+        resources: {}
+        volumeMounts:
+        - name: spinnaker-spinnaker-spinnaker-config
+          mountPath: "/opt/spinnaker/config"
+        terminationMessagePath: "/dev/termination-log"
+        terminationMessagePolicy: File
+        imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1

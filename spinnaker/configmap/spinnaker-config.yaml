@@ -1,35 +1,868 @@
-{
-  "kind": "ConfigMap",
-  "apiVersion": "v1",
-  "metadata": {
-    "name": "spinnaker-spinnaker-spinnaker-config",
-    "namespace": "spinnaker",
-    "selfLink": "/api/v1/namespaces/spinnaker/configmaps/spinnaker-spinnaker-spinnaker-config",
-    "uid": "95b4f0ce-2346-11e8-baf7-06dec40001b5",
-    "resourceVersion": "143628",
-    "creationTimestamp": "2018-03-09T03:04:30Z",
-    "labels": {
-      "app": "spinnaker-spinnaker"
-    }
-  },
-  "data": {
-    "clouddriver-local.yml": "server:\n  port: ${services.clouddriver.port:7002}\n  address: 0.0.0.0\n\ndefault:\n  account:\n    env: ${providers.kubernetes.primaryCredentials.name}\n\nkubernetes:\n  enabled: true\n  accounts:\n    - name: local\n      serviceAccount: true\n      dockerRegistries:\n        - accountName: dockerhub\n\ndockerRegistry:\n  enabled: true\n  accounts:\n    - name: dockerhub\n      address: https://index.docker.io\n      \n      repositories:\n        - library/alpine\n        - library/ubuntu\n        - library/centos\n        - library/nginx\n      \ncredentials:\n  primaryAccountTypes: ${providers.kubernetes.primaryCredentials.name}\n  challengeDestructiveActionsEnvironments: ${providers.kubernetes.primaryCredentials.name}\n",
-    "clouddriver.yml": "server:\n  port: ${services.clouddriver.port:7002}\n  address: ${services.clouddriver.host:localhost}\n\nredis:\n  connection: ${services.redis.connection:redis://localhost:6379}\n\nudf:\n  # Controls whether UserDataProviders are used to populate user data of new\n  # server groups. If false, user data is copied over from ancestor server\n  # groups on both CopyLastAsgAtomicOperation and\n  # ModifyAsgLaunchConfigurationOperation (only if no user data is provided\n  # on the given request).\n  enabled: ${services.clouddriver.aws.udf.enabled:true}\n\ndefault:\n  account:\n    env: ${providers.aws.primaryCredentials.name}\n\naws:\n  # AWS Credentials are passed either as environment variables or through\n  # a standard AWS file $HOME/.aws/credentials\n  # See providers.aws.primaryCredentials in spinnaker.yml for more\n  # info on setting environment variables.\n  enabled: ${providers.aws.enabled:false}\n  defaults:\n    iamRole: ${provider.aws.defaultIAMRole:BaseIAMRole}\n  defaultRegions:\n    - name: ${providers.aws.defaultRegion:us-east-1}\n  defaultFront50Template: ${services.front50.baseUrl}\n  defaultKeyPairTemplate: ${providers.aws.defaultKeyPairTemplate}\n\nazure:\n  enabled: ${providers.azure.enabled:false}\n\n  accounts:\n    - name: ${providers.azure.primaryCredentials.name}\n      clientId: ${providers.azure.primaryCredentials.clientId}\n      appKey: ${providers.azure.primaryCredentials.appKey}\n      tenantId: ${providers.azure.primaryCredentials.tenantId}\n      subscriptionId: ${providers.azure.primaryCredentials.subscriptionId}\n\ngoogle:\n  enabled: ${providers.google.enabled:false}\n\n  accounts:\n    - name: ${providers.google.primaryCredentials.name}\n      project: ${providers.google.primaryCredentials.project}\n      jsonPath: ${providers.google.primaryCredentials.jsonPath}\n\ncf:\n  enabled: ${providers.cf.enabled:false}\n\n  accounts:\n    - name: ${providers.cf.primaryCredentials.name}\n      api: ${providers.cf.primaryCredentials.api}\n      console: ${providers.cf.primaryCredentials.console}\n      org: ${providers.cf.defaultOrg}\n      space: ${providers.cf.defaultSpace}\n      username: ${providers.cf.account.name:}\n      password: ${providers.cf.account.password:}\n\nkubernetes:\n  enabled: ${providers.kubernetes.enabled:false}\n  accounts:\n    - name: ${providers.kubernetes.primaryCredentials.name}\n      serviceAccount: true\n      dockerRegistries:\n      - accountName: dockerhub\n      \n\ndockerRegistry:\n  \n  enabled: true\n  accounts:\n    - name: dockerhub\n      address: https://index.docker.io\n      repositories:\n        - library/alpine\n        - library/ubuntu\n        - library/centos\n        - library/nginx\n  \n\ncredentials:\n  primaryAccountTypes: ${providers.aws.primaryCredentials.name}, ${providers.google.primaryCredentials.name}, ${providers.cf.primaryCredentials.name}, ${providers.azure.primaryCredentials.name}\n  challengeDestructiveActionsEnvironments: ${providers.aws.primaryCredentials.name}, ${providers.google.primaryCredentials.name}, ${providers.cf.primaryCredentials.name}, ${providers.azure.primaryCredentials.name}\n",
-    "echo-local.yml": "server:\n  port: ${services.echo.port:8089}\n  address: 0.0.0.0\n\ncassandra:\n  enabled: false\n\nspinnaker:\n  inMemory:\n    enabled: true\n  cassandra:\n    enabled: false\n\nfront50:\n  baseUrl: ${services.front50.baseUrl:http://localhost:8080}\n\norca:\n  baseUrl: ${services.orca.baseUrl:http://localhost:8083}\n\nendpoints.health.sensitive: false\n\nslack:\n  enabled: ${services.echo.notifications.slack.enabled:false}\n  token: ${services.echo.notifications.slack.token}\n\nspring:\n  mail:\n    host: ${services.echo.notifications.mail.host}\n    port: ${services.echo.notifications.mail.port}\n    username: ${services.echo.notifications.mail.username}\n    password: ${services.echo.notifications.mail.password}\n    properties:\n      mail:\n        smtp:\n          auth:  ${services.echo.notifications.mail.auth:true}\n          ssl:\n            enable: ${services.echo.notifications.mail.ssl:true}\n\nmail:\n  enabled: ${services.echo.notifications.mail.enabled:false}\n  host: ${services.echo.notifications.mail.host}\n  from: ${services.echo.notifications.mail.fromAddress}\n\nhipchat:\n  enabled: ${services.echo.notifications.hipchat.enabled:false}\n  baseUrl: ${services.echo.notifications.hipchat.url}\n  token: ${services.echo.notifications.hipchat.token}\n\ntwilio:\n  enabled: ${services.echo.notifications.sms.enabled:false}\n  baseUrl: ${services.echo.notifications.sms.url:https://api.twilio.com/}\n  account: ${services.echo.notifications.sms.account}\n  token: ${services.echo.notifications.sms.token}\n  from: ${services.echo.notifications.sms.from}\n\nscheduler:\n  enabled: ${services.echo.cron.enabled:true}\n  threadPoolSize: 20\n  triggeringEnabled: true\n  pipelineConfigsPoller:\n    enabled: true\n    pollingIntervalMs: 30000\n",
-    "echo.yml": "server:\n  port: ${services.echo.port:8089}\n  address: 0.0.0.0\n\ncassandra:\n  enabled: false\n  embedded: true\n  host: ${services.cassandra.host:localhost}\n\nspinnaker:\n  baseUrl: ${services.deck.baseUrl}\n  cassandra:\n     enabled: ${services.echo.cassandra.enabled:true}\n  inMemory:\n     enabled: ${services.echo.inMemory.enabled:false}\n\nfront50:\n  baseUrl: ${services.front50.baseUrl:http://localhost:8080}\n\norca:\n  baseUrl: ${services.orca.baseUrl:http://localhost:8083}\n\nendpoints.health.sensitive: false\n\nslack:\n  enabled: ${services.echo.notifications.slack.enabled:false}\n  token: ${services.echo.notifications.slack.token}\n\nspring:\n  mail:\n    host: ${services.echo.notifications.mail.host}\n    port: ${services.echo.notifications.mail.port}\n    username: ${services.echo.notifications.mail.username}\n    password: ${services.echo.notifications.mail.password}\n    properties:\n      mail:\n        smtp:\n          auth:  ${services.echo.notifications.mail.auth:true}\n          ssl:\n            enable: ${services.echo.notifications.mail.ssl:true}\nmail:\n  enabled: ${services.echo.notifications.mail.enabled:false}\n  host: ${services.echo.notifications.mail.host}\n  from: ${services.echo.notifications.mail.fromAddress}\n\nhipchat:\n  enabled: ${services.echo.notifications.hipchat.enabled:false}\n  baseUrl: ${services.echo.notifications.hipchat.url}\n  token: ${services.echo.notifications.hipchat.token}\n\ntwilio:\n  enabled: ${services.echo.notifications.sms.enabled:false}\n  baseUrl: ${services.echo.notifications.sms.url:https://api.twilio.com/}\n  account: ${services.echo.notifications.sms.account}\n  token: ${services.echo.notifications.sms.token}\n  from: ${services.echo.notifications.sms.from}\n\nscheduler:\n  enabled: ${services.echo.cron.enabled:true}\n  threadPoolSize: 20\n  triggeringEnabled: true\n  pipelineConfigsPoller:\n    enabled: true\n    pollingIntervalMs: 30000\n  cron:\n    timezone: ${services.echo.cron.timezone}\n",
-    "fiat.yml": "server:\n  port: ${services.fiat.port:7003}\n  address: 0.0.0.0\n\nredis:\n  connection: ${services.redis.connection:redis://localhost:6379}\n\nauth:\n  getAll:\n    enabled: false\n",
-    "fiat.yml-local": "",
-    "front50-local.yml": "server:\n  port: ${services.front50.port:8080}\n  address: 0.0.0.0\n\naws:\n  simpleDBEnabled: ${providers.aws.simpleDBEnabled:false}\n  defaultSimpleDBDomain: ${providers.aws.defaultSimpleDBDomain}\n\ncassandra:\n  enabled: false\n\nspinnaker:\n  cassandra:\n    enabled: false\n  redis:\n    enabled: false\n  gcs:\n    enabled: ${services.front50.gcs.enabled}\n    project: ${services.front50.gcs.project}\n    jsonPath: /root/.kube/account.json # Don't change this\n    rootFolder: ${services.front50.bucket_root}\n    bucket: ${services.front50.storage_bucket}\n  s3:\n    enabled: ${services.front50.s3.enabled}\n    rootFolder: ${services.front50.bucket_root}\n    bucket: ${services.front50.storage_bucket}\n    endpoint: ${services.front50.s3.endpoint}\n",
-    "front50.yml": "server:\n  port: ${services.front50.port:8080}\n  address: ${services.front50.host:localhost}\n\ncassandra:\n  enabled: ${services.front50.cassandra.enabled:true}\n  embedded: ${services.cassandra.embedded:false}\n  host: ${services.cassandra.host:localhost}\n\naws:\n  simpleDBEnabled: ${providers.aws.simpleDBEnabled:false}\n  defaultSimpleDBDomain: ${providers.aws.defaultSimpleDBDomain}\n\nspinnaker:\n  cassandra:\n    enabled: ${services.front50.cassandra.enabled:true}\n    host: ${services.cassandra.host:localhost}\n    port: ${services.cassandra.port:9042}\n    cluster: ${services.cassandra.cluster:CASS_SPINNAKER}\n    keyspace: front50\n    name: global\n\n  redis:\n    enabled: ${services.front50.redis.enabled:false}\n\n  gcs:\n    enabled: ${services.front50.gcs.enabled:false}\n    bucket: ${services.front50.storage_bucket:}\n    # See https://cloud.google.com/storage/docs/managing-buckets#manage-class-location\n    bucketLocation: ${services.front50.bucket_location:}\n    rootFolder: ${services.front50.bucket_root:front50}\n    project: ${providers.google.primaryCredentials.project}\n    jsonPath: ${providers.google.primaryCredentials.jsonPath}\n\n  aws:\n    enabled: ${services.front50.s3.enabled:false}\n    bucket: ${services.front50.storage_bucket:}\n    rootFolder: ${services.front50.bucket_root:front50}\n    endpoint: ${services.front50.s3.endpoint:}\n",
-    "gate.yml": "server:\n  port: ${services.gate.port:8084}\n  address: 0.0.0.0\n  # ssl:\n  #   enabled: false\n  #   keyStore: /opt/spinnaker/gate-tls/keystore.jks\n  #   keyStorePassword: password\n  #   keyAlias: server\n\n# Circular references since we're already using 'services'\n# services:\n#   clouddriver:\n#     baseUrl: ${services.clouddriver.baseUrl:localhost:7002}\n#   orca:\n#     baseUrl: ${services.orca.baseUrl:localhost:8083}\n#   front50:\n#     baseUrl: ${services.front50.baseUrl:localhost:8080}\n# #optional services:\n#   echo:\n#     enabled: ${services.echo.enabled:true}\n#     baseUrl: ${services.echo.baseUrl:8089}\n#   flapjack:\n#     enabled: ${services.flapjack.enabled:false}\n#   igor:\n#     enabled: ${services.igor.enabled:false}\n#     baseUrl: ${services.igor.baseUrl:8088}\n\ncors:\n  allowedOriginsPattern: ^https?://(?:localhost|127.0.0.1|[^/]+\\.example\\.com)(?::[1-9]\\d*)?/?$\n\nredis:\n  connection: ${services.redis.connection}\n",
-    "igor-local.yml": "server:\n  port: ${services.igor.port:8088}\n  address: 0.0.0.0\n\njenkins:\n  enabled: ${services.jenkins.enabled:false}\n  masters:\n    - name: default\n      address: ${services.jenkins.defaultMaster.baseUrl}\n      username: ${services.jenkins.defaultMaster.username}\n      password: ${services.jenkins.defaultMaster.password}\n\ndockerRegistry:\n  enabled: true\n\nredis:\n  connection: ${services.redis.connection:redis://localhost:6379}\n  \n# Igor depends on Clouddriver and Echo. These are normally configured\n# in spinnaker[-local].yml (if present), otherwise, uncomment this.\n# services:\n#   clouddriver:\n#     baseUrl: ${services.clouddriver.baseUrl}\n#   echo:\n#     baseUrl: ${services.echo.baseUrl}\n",
-    "igor.yml": "server:\n  port: ${services.igor.port:8088}\n  address: 0.0.0.0\n\njenkins:\n  enabled: ${services.jenkins.enabled:false}\n  masters:\n    - name: default\n      address: ${services.jenkins.defaultMaster.baseUrl}\n      username: ${services.jenkins.defaultMaster.username}\n      password: ${services.jenkins.defaultMaster.password}\n\ntravis:\n  enabled: ${services.travis.enabled:false}\n  masters:\n    - name: ${services.travis.defaultMaster.name}\n      baseUrl: ${services.travis.defaultMaster.baseUrl}\n      address: ${services.travis.defaultMaster.address}\n      githubToken: ${services.travis.defaultMaster.githubToken}\n\ndockerRegistry:\n  enabled: true\n\nredis:\n  connection: ${services.redis.connection:redis://localhost:6379}\n\n# Igor depends on Clouddriver and Echo. These are normally configured\n# in spinnaker[-local].yml (if present), otherwise, uncomment this.\n# services:\n#   clouddriver:\n#     baseUrl: ${services.clouddriver.baseUrl}\n#   echo:\n#     baseUrl: ${services.echo.baseUrl}\n",
-    "orca-local.yml": "server:\n    port: ${services.orca.port:8083}\n    address: 0.0.0.0\n\noort:\n    baseUrl: ${services.oort.baseUrl:localhost:7002}\nfront50:\n    baseUrl: ${services.front50.baseUrl:localhost:8080}\nmort:\n    baseUrl: ${services.mort.baseUrl:localhost:7002}\nkato:\n    baseUrl: ${services.kato.baseUrl:localhost:7002}\nbakery:\n    baseUrl: ${services.bakery.baseUrl:localhost:8087}\n    extractBuildDetails: ${services.bakery.extractBuildDetails:true}\necho:\n    enabled: ${services.echo.enabled:false}\n    baseUrl: ${services.echo.baseUrl:8089}\n\nigor:\n    baseUrl: ${services.igor.baseUrl:8088}\n\n# TODO(duftler): Remove this once flex is conditionally-enabled in orca.\nflex:\n  baseUrl: http://not-a-host\n\ndefault:\n  bake:\n    account: ${providers.aws.primaryCredentials.name}\n  securityGroups:\n  vpc:\n    securityGroups:\n\nredis:\n  connection: ${services.redis.connection}\n\nscript:\n  master: default # name of Jenkins master in Spinnaker\n  job: run-script # from Jenkins job configuration\n",
-    "orca.yml": "server:\n    port: ${services.orca.port:8083}\n    address: 0.0.0.0\n\noort:\n    baseUrl: ${services.oort.baseUrl:localhost:7002}\nfront50:\n    baseUrl: ${services.front50.baseUrl:localhost:8080}\nmort:\n    baseUrl: ${services.mort.baseUrl:localhost:7002}\nkato:\n    baseUrl: ${services.kato.baseUrl:localhost:7002}\nbakery:\n    baseUrl: ${services.bakery.baseUrl:localhost:8087}\n    extractBuildDetails: ${services.bakery.extractBuildDetails:true}\n    propagateCloudProviderType: ${services.bakery.propagateCloudProviderType:true}\n    allowMissingPackageInstallation: ${services.bakery.allowMissingPackageInstallation:false}\necho:\n    enabled: ${services.echo.enabled:false}\n    baseUrl: ${services.echo.baseUrl:8089}\n\nigor:\n    baseUrl: ${services.igor.baseUrl:8088}\n\n# TODO(duftler): Remove this once flex is conditionally-enabled in orca.\nflex:\n  baseUrl: http://not-a-host\n\ndefault:\n  bake:\n    account: local\n  securityGroups:\n  vpc:\n    securityGroups:\n\nredis:\n  connection: ${services.redis.connection}\n\ntasks:\n  executionWindow:\n    timezone: ${services.orca.timezone}\n\nscript:\n  master: default # name of Jenkins master in Spinnaker\n  job: run-script # from Jenkins job configuration\n",
-    "rosco-local.yml": "server:\n  port: ${services.rosco.port:8087}\n  address: 0.0.0.0\n\nredis:\n  connection: ${services.redis.connection:redis://localhost:6379}\n\naws:\n  enabled: ${providers.aws.enabled:false}\n\ndocker:\n  enabled: ${services.docker.enabled:false}\n  bakeryDefaults:\n    targetRepository: ${services.docker.targetRepository}\n\ngoogle:\n  enabled: ${providers.google.enabled:false}\n  accounts:\n    - name: ${providers.google.primaryCredentials.name}\n      project: ${providers.google.primaryCredentials.project}\n      jsonPath: ${providers.google.primaryCredentials.jsonPath}\n  gce:\n    bakeryDefaults:\n      zone: ${providers.google.defaultZone}\n\nrosco:\n  configDir: ${services.rosco.configDir}\n",
-    "rosco.yml": "server:\n  port: ${services.rosco.port:8087}\n  address: 0.0.0.0\n\nredis:\n  connection: ${services.redis.connection:redis://localhost:6379}\n\naws:\n  enabled: ${providers.aws.enabled:false}\n\ndocker:\n  enabled: ${services.docker.enabled:false}\n  bakeryDefaults:\n    targetRepository: ${services.docker.targetRepository}\n\ngoogle:\n  enabled: ${providers.google.enabled:false}\n  accounts:\n    - name: ${providers.google.primaryCredentials.name}\n      project: ${providers.google.primaryCredentials.project}\n      jsonPath: ${providers.google.primaryCredentials.jsonPath}\n  gce:\n    bakeryDefaults:\n      zone: ${providers.google.defaultZone}\n\nrosco:\n  configDir: ${services.rosco.configDir}\n",
-    "settings.js": "'use strict';\n\nvar feedbackUrl = 'http://localhost';\nvar gateHost = '/gate';\nvar bakeryDetailUrl = gateHost + '/bakery/logs/global/{{ context.status.id }}';\n\nwindow.spinnakerSettings = {\n  defaultProviders: ['kubernetes'],\n  feedbackUrl: feedbackUrl,\n  gateUrl: gateHost,\n  bakeryDetailUrl: bakeryDetailUrl,\n  pollSchedule: 30000,\n  defaultTimeZone: 'America/Los_Angeles', // see http://momentjs.com/timezone/docs/#/data-utilities/\n  providers: {\n    kubernetes: {\n      defaults: {\n        account: 'local',\n        namespace: 'default'\n      },\n    }\n  },\n  notifications: {\n    email: {\n      enabled: false,\n    },\n    hipchat: {\n      enabled: false,\n      botName: 'Spinnaker Bot'\n    },\n    sms: {\n      enabled: false,\n    },\n    slack: {\n      enabled: false,\n      botName: 'spinnakerbot'\n    }\n  },\n  whatsNew: {\n    gistId: '32526cd608db3d811b38',\n    fileName: 'news.md',\n  },\n  feature: {\n    pipelines: true,\n    jobs: true,\n    notifications: true,\n    fastProperty: false,\n    vpcMigrator: false,\n    clusterDiff: false,\n    roscoMode: false,\n    netflixMode: false,\n    infrastructureStages: true, // Should 'createLoadBalancer' be a pipeline stage? (no).\n  },\n};\n",
-    "spinnaker-local.yml": "global:\n  spinnaker:\n    environment: test\n\nservices:\n  default:\n    # These defaults can be modified to change all the spinnaker subsystems\n    # (clouddriver, gate, etc) at once, but not external systems (jenkins, etc).\n    # Individual systems can still be overridden using their own section entry\n    # directly under 'services'.\n    host: localhost\n    protocol: http\n\n  clouddriver:\n    host: spinnaker-spinnaker-clouddriver\n    port: 7002\n    baseUrl: ${services.default.protocol}://${services.clouddriver.host}:${services.clouddriver.port}\n    # Controls whether UserDataProviders are used to populate user data of new server groups.\n    # If false, user data is copied over from ancestor server groups on both CopyLastAsgAtomicOperation and\n    # ModifyAsgLaunchConfigurationOperation (only if no user data is provided on the given request).\n    aws:\n      udf:\n        enabled: false\n\n  echo:\n    enabled: true\n    host: spinnaker-spinnaker-echo\n    port: 8089\n    baseUrl: ${services.default.protocol}://${services.echo.host}:${services.echo.port}\n    cron:\n      enabled: true\n    notifications:\n      # allow pipeline triggers to run periodically via cron expressions\n      # If you wish for spinnaker to send notifications, configure the following blocks\n      mail:\n        enabled: false\n        host: smtp.example.org\n        username: admin\n        password: admin\n        fromAddress: spinnaker@example.org\n        port: 25\n      hipchat:\n        enabled: false\n        url: # the hipchat server to connect to\n        token: #the hipchat auth token\n      sms:\n        enabled: false\n        account: # twilio account id\n        token: # twilio auth token\n        from: # phone number by which sms messages are sent\n      slack:\n        enabled: false\n        token: \n\n  deck:\n    host: spinnaker-spinnaker-deck\n    port: 9000\n    baseUrl: ${services.default.protocol}://${services.deck.host}:${services.deck.port}\n    gateUrl: ${services.gate.baseUrl}\n    bakeryUrl: ${services.bakery.baseUrl}\n    timezone: 'America/New_York'\n    auth:\n      enabled: false\n\n  front50:\n    host: spinnaker-spinnaker-front50\n    port: 8080\n    baseUrl: ${services.default.protocol}://${services.front50.host}:${services.front50.port}\n\n    # If using storage bucket persistence (gcs or s3), specify the bucket here\n    # disable cassandra and enable the storage service below.\n    storage_bucket: spinnaker\n    bucket_root: front50\n\n    cassandra:\n      enabled: false\n    redis:\n      enabled: false\n    \n    gcs:\n      enabled: false\n    s3:\n      enabled: true\n      endpoint: http://spinnaker-minio-svc:9000\n    \n  gate:\n    host: spinnaker-spinnaker-gate\n    port: 8084\n    baseUrl: ${services.default.protocol}://${services.gate.host}:${services.gate.port}/gate\n\n  igor:\n    # If you are integrating Jenkins then you must also enable Spinnaker's\n    # \"igor\" subsystem.\n    enabled: true\n    host: spinnaker-spinnaker-igor\n    port: 8088\n    baseUrl: ${services.default.protocol}://${services.igor.host}:${services.igor.port}\n\n  kato:\n    host: ${services.clouddriver.host}\n    port: ${services.clouddriver.port}\n    baseUrl: ${services.clouddriver.baseUrl}\n\n  mort:\n    host: ${services.clouddriver.host}\n    port: ${services.clouddriver.port}\n    baseUrl: ${services.clouddriver.baseUrl}\n\n  orca:\n    host: spinnaker-spinnaker-orca\n    port: 8083\n    baseUrl: ${services.default.protocol}://${services.orca.host}:${services.orca.port}\n    enabled: true\n\n  oort:\n    host: ${services.clouddriver.host}\n    port: ${services.clouddriver.port}\n    baseUrl: ${services.clouddriver.baseUrl}\n\n  rosco:\n    host: spinnaker-spinnaker-rosco\n    port: 8087\n    baseUrl: ${services.default.protocol}://${services.rosco.host}:${services.rosco.port}\n    # You need to provide the fully-qualified path to the directory containing the packer templates.\n    # They typically live in rosco's config/packer directory.\n    configDir: /opt/rosco/config/packer\n\n  bakery:\n    host: ${services.rosco.host}\n    port: ${services.rosco.port}\n    baseUrl: ${services.rosco.baseUrl}\n    extractBuildDetails: true\n\n  docker:\n    # This target repository is used by the bakery to publish baked docker images.\n    # Do not include http://.\n    enabled: true\n    targetRepository: viglesiasce/sample-app\n\n  jenkins:\n    # The \"name\" entry is used for the display name when selecting\n    # this server. You must set `enabled` to true when enabling igor.\n    #\n    # If you have multiple jenkins servers, you will need to list\n    # them in an igor-local.yml. See jenkins.masters in config/igor.yml.\n    #\n    # Note that jenkins is not installed with Spinnaker so you must obtain this\n    # on your own if you are interested.\n    enabled: true\n    defaultMaster:\n      name: default\n      baseUrl: http://spinnaker-jenkins:8080/\n      username: admin\n      password: admin\n\n  redis:\n    host: spinnaker-redis\n    port: 6379\n    connection: redis://:password@${services.redis.host}:${services.redis.port}\n\nproviders:\n\n  kubernetes:\n    enabled: true\n    primaryCredentials:\n      name: local\n      namespace: default\n      dockerRegistryAccount: dockerhub\n\n  dockerRegistry:\n    enabled: true\n    primaryCredentials:\n      name: dockerhub\n      address: https://index.docker.io\n      repository: vic-goog/gceme\n",
-    "spinnaker.yml": "\n# This file is intended to serve as a master configuration for a Spinnaker\n# deployment. Customizations to the deployment should be made in another file\n# named \"spinnaker-local.yml\". The distribution has a prototype called\n# \"default-spinnaker-local.yml\" which calls out the subset of attributes of\n# general interest. It can be copied into a \"spinnaker-local.yml\" to start\n# with. The prototype does not change any of the default values here, it just\n# surfaces the more critical attributes.\n\nglobal:\n  spinnaker:\n    environment: test\n    timezone: 'America/Los_Angeles'\n\nservices:\n  default:\n    # These defaults can be modified to change all the spinnaker subsystems\n    # (clouddriver, gate, etc) at once, but not external systems (jenkins, etc).\n    # Individual systems can still be overridden using their own section entry\n    # directly under 'services'.\n    host: localhost\n    protocol: http\n\n  clouddriver:\n    host: ${services.default.host}\n    port: 7002\n    baseUrl: ${services.default.protocol}://${services.clouddriver.host}:${services.clouddriver.port}\n    aws:\n      udf:\n        # Controls whether UserDataProviders are used to populate user data of\n        # new server groups. If false, user data is copied over from ancestor\n        # server groups on both CopyLastAsgAtomicOperation and\n        # ModifyAsgLaunchConfigurationOperation (only if no user data is\n        # provided on the given request).\n        enabled: true\n\n  echo:\n    enabled: true\n    host: ${services.default.host}\n    port: 8089\n    baseUrl: ${services.default.protocol}://${services.echo.host}:${services.echo.port}\n\n    cron:\n      # Allow pipeline triggers to run periodically via cron expressions.\n      enabled: true\n      timezone: ${global.spinnaker.timezone}\n\n    notifications:\n      # The following blocks can enable Spinnaker to send notifications\n      # using the corresponding mechanism.\n      # See https://www.spinnaker.io/setup/features/notifications/\n      # for more information.\n      mail:\n        enabled: ${services.echo.notifications.mail.enabled:false}\n        host: ${services.echo.notifications.mail.host}\n        from: ${services.echo.notifications.mail.fromAddress}\n        username: ${services.echo.notifications.mail.username}\n        password: ${services.echo.notifications.mail.password}\n        port: ${services.echo.notifications.mail.port}\n      hipchat:\n        enabled: false\n        url: # the hipchat server to connect to\n        token: # the hipchat auth token\n        botName: # the username of the bot\n      sms:\n        enabled: false\n        account: # twilio account id\n        token: # twilio auth token\n        from: # phone number by which sms messages are sent\n      slack:\n        enabled: ${services.echo.notifications.slack.enabled:false}\n        token: ${services.echo.notifications.slack.token}\n\n  deck:\n    host: ${services.default.host}\n    port: 9000\n    baseUrl: ${services.default.protocol}://${services.deck.host}:${services.deck.port}\n    gateUrl: ${services.gate.baseUrl}\n    bakeryUrl: ${services.bakery.baseUrl}\n    timezone: ${global.spinnaker.timezone}\n    auth:\n      enabled: false\n\n  fiat:\n    enabled: false\n    host: ${services.default.host}\n    port: 7003\n    baseUrl: ${services.default.protocol}://${services.fiat.host}:${services.fiat.port}\n\n  front50:\n    host: ${services.default.host}\n    port: 8080\n    baseUrl: ${services.default.protocol}://${services.front50.host}:${services.front50.port}\n\n    # If using storage bucket persistence (gcs or s3), specify the bucket here\n    # disable cassandra and enable the storage service below.\n    storage_bucket: ${services.front50.storage_bucket}\n    # (GCS Only) Location for bucket.\n    bucket_location:\n    bucket_root: front50\n\n    cassandra:\n      enabled: false\n    redis:\n      enabled: false\n    gcs:\n      enabled: ${services.front50.gcs.enabled} # Enable me\n      project: ${services.front50.gcs.project}\n    s3:\n      enabled: ${services.front50.s3.enabled} # Or me\n      endpoint: ${services.front50.s3.endpoint}\n\n  gate:\n    host: ${services.default.host}\n    port: 8084\n    baseUrl: ${services.default.protocol}://${services.gate.host}:${services.gate.port}\n\n  igor:\n    # If you are integrating Jenkins then you must also enable Spinnaker's\n    # \"igor\" subsystem.\n    enabled: false\n    host: ${services.default.host}\n    port: 8088\n    baseUrl: ${services.default.protocol}://${services.igor.host}:${services.igor.port}\n\n  kato:\n    host: ${services.clouddriver.host}\n    port: ${services.clouddriver.port}\n    baseUrl: ${services.clouddriver.baseUrl}\n\n  mort:\n    host: ${services.clouddriver.host}\n    port: ${services.clouddriver.port}\n    baseUrl: ${services.clouddriver.baseUrl}\n\n  orca:\n    host: ${services.default.host}\n    port: 8083\n    baseUrl: ${services.default.protocol}://${services.orca.host}:${services.orca.port}\n    timezone: ${global.spinnaker.timezone}\n    enabled: true\n\n  oort:\n    host: ${services.clouddriver.host}\n    port: ${services.clouddriver.port}\n    baseUrl: ${services.clouddriver.baseUrl}\n\n  rosco:\n    host: ${services.default.host}\n    port: 8087\n    baseUrl: ${services.default.protocol}://${services.rosco.host}:${services.rosco.port}\n    # You need to provide the fully-qualified path to the directory containing the packer templates.\n    # They typically live in rosco's config/packer directory.\n    configDir: /opt/rosco/config/packer\n\n  bakery:\n    host: ${services.rosco.host}\n    port: ${services.rosco.port}\n    baseUrl: ${services.rosco.baseUrl}\n    extractBuildDetails: true\n    propagateCloudProviderType: true\n    allowMissingPackageInstallation: false\n\n  docker:\n    # This target repository is used by the bakery to publish baked docker images.\n    # Do not include http://.\n    enabled: ${services.docker.enabled:false}\n    targetRepository: ${services.docker.targetRepository}\n\n  jenkins:\n    # The \"name\" entry is used for the display name when selecting\n    # this server. You must set `enabled` to true when enabling igor.\n    #\n    # If you have multiple jenkins servers, you will need to list\n    # them in an igor-local.yml. See jenkins.masters in config/igor.yml.\n    #\n    # Note that jenkins is not installed with Spinnaker so you must obtain this\n    # on your own if you are interested.\n    enabled: ${services.igor.enabled:false}\n    defaultMaster:\n      name: Jenkins\n      baseUrl:   # Expected in spinnaker-local.yml\n      username:  # Expected in spinnaker-local.yml\n      password:  # Expected in spinnaker-local.yml\n\n  redis:\n    host: ${services.default.host}\n    port: 6379\n    connection: redis://${services.redis.host}:${services.redis.port}\n\n  cassandra:\n    # cassandra.enabled is no longer used\n    # cassandra is enabled or disabled on a per-service basis\n    # where the alternative persistence mechanism for that service\n    # can be enabled.\n    host: ${services.cassandra.host}\n    port: ${services.cassandra.port}\n    embedded: ${services.cassandra.embedded}\n    cluster: ${services.cassandra.cluster}\n\nproviders:\n  aws:\n    # For more information on configuring Amazon Web Services (aws), see\n    # https://www.spinnaker.io/setup/providers/aws/\n\n    enabled: false\n    simpleDBEnabled: false\n    defaultRegion: us-east-1\n    defaultSimpleDBDomain: CLOUD_APPLICATIONS\n    primaryCredentials:\n      name: default\n      # The actual credentials are set using a standard AWS client library mechanism\n      # http://docs.aws.amazon.com/AWSSdkDocsJava/latest/DeveloperGuide/credentials.html\n      # Typically this is a $HOME/.aws/credentials file (remember, a standard\n      # spinnaker installation runs as user \"spinnaker\" whose $HOME is\n      # /home/spinnaker). The primaryCredentials.name will identify which profile\n      # to use (for .aws/credentials).\n\n    # {{name}} will be interpolated with the aws account name (e.g. \"my-aws-account-keypair\").\n    defaultKeyPairTemplate: \"{{name}}-keypair\"\n\n  google:\n    # For more information on configuring Google Cloud Platform (google), see\n    # https://www.spinnaker.io/setup/providers/gce/\n\n    enabled: false\n    defaultRegion: us-central1\n    defaultZone: us-central1-f\n    primaryCredentials:\n      name: my-account-name\n      # The project is the Google Project ID for the project to manage with\n      # Spinnaker. The jsonPath is a path to the JSON service credentials\n      # downloaded from the Google Developer's Console.\n      project:\n      jsonPath:\n\n  azure:\n    # For more information on configuring Microsoft Azure (azure), see\n    # https://www.spinnaker.io/setup/providers/azure/\n\n    enabled: false\n    defaultRegion: westus\n    primaryCredentials:\n      name: my-azure-account\n\n      # To set Azure credentials, enter your Azure supscription values for:\n      # clientId, appKey, tenantId, and subscriptionId.\n      clientId:\n      appKey:\n      tenantId:\n      subscriptionId:\n\n  kubernetes:\n    # For more information on configuring Kubernetes clusters (kubernetes), see\n    # https://www.spinnaker.io/setup/providers/kubernetes/\n\n    # NOTE: enabling kubernetes also requires enabling dockerRegistry.\n    enabled: ${providers.kubernetes.enabled}\n    primaryCredentials:\n      name: ${providers.kubernetes.primaryCredentials.name}\n      namespace: ${providers.kubernetes.primaryCredentials.namespace}\n      dockerRegistryAccount: ${providers.dockerRegistry.primaryCredentials.name}\n\n  dockerRegistry:\n    # If you want to use a container based provider, you need to configure and\n    # enable this provider to cache images.\n    enabled: ${providers.dockerRegistry.enabled}\n    primaryCredentials:\n      name: ${providers.dockerRegistry.primaryCredentials.name}\n      address: ${providers.dockerRegistry.primaryCredentials.address}\n      repository: ${providers.dockerRegistry.primaryCredentials.repository}\n"
-  }
-}
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: spinnaker-spinnaker-spinnaker-config
+  namespace: spinnaker
+  labels:
+    app: spinnaker-spinnaker
+data:
+  clouddriver-local.yml: "server:\n  port: ${services.clouddriver.port:7002}\n  address:
+    0.0.0.0\n\ndefault:\n  account:\n    env: ${providers.kubernetes.primaryCredentials.name}\n\nkubernetes:\n
+    \ enabled: true\n  accounts:\n    - name: local\n      serviceAccount: true\n
+    \     dockerRegistries:\n        - accountName: dockerhub\n\ndockerRegistry:\n
+    \ enabled: true\n  accounts:\n    - name: dockerhub\n      address: https://index.docker.io\n
+    \     \n      repositories:\n        - library/alpine\n        - library/ubuntu\n
+    \       - library/centos\n        - library/nginx\n      \ncredentials:\n  primaryAccountTypes:
+    ${providers.kubernetes.primaryCredentials.name}\n  challengeDestructiveActionsEnvironments:
+    ${providers.kubernetes.primaryCredentials.name}\n"
+  clouddriver.yml: "server:\n  port: ${services.clouddriver.port:7002}\n  address:
+    ${services.clouddriver.host:localhost}\n\nredis:\n  connection: ${services.redis.connection:redis://localhost:6379}\n\nudf:\n
+    \ # Controls whether UserDataProviders are used to populate user data of new\n
+    \ # server groups. If false, user data is copied over from ancestor server\n  #
+    groups on both CopyLastAsgAtomicOperation and\n  # ModifyAsgLaunchConfigurationOperation
+    (only if no user data is provided\n  # on the given request).\n  enabled: ${services.clouddriver.aws.udf.enabled:true}\n\ndefault:\n
+    \ account:\n    env: ${providers.aws.primaryCredentials.name}\n\naws:\n  # AWS
+    Credentials are passed either as environment variables or through\n  # a standard
+    AWS file $HOME/.aws/credentials\n  # See providers.aws.primaryCredentials in spinnaker.yml
+    for more\n  # info on setting environment variables.\n  enabled: ${providers.aws.enabled:false}\n
+    \ defaults:\n    iamRole: ${provider.aws.defaultIAMRole:BaseIAMRole}\n  defaultRegions:\n
+    \   - name: ${providers.aws.defaultRegion:us-east-1}\n  defaultFront50Template:
+    ${services.front50.baseUrl}\n  defaultKeyPairTemplate: ${providers.aws.defaultKeyPairTemplate}\n\nazure:\n
+    \ enabled: ${providers.azure.enabled:false}\n\n  accounts:\n    - name: ${providers.azure.primaryCredentials.name}\n
+    \     clientId: ${providers.azure.primaryCredentials.clientId}\n      appKey:
+    ${providers.azure.primaryCredentials.appKey}\n      tenantId: ${providers.azure.primaryCredentials.tenantId}\n
+    \     subscriptionId: ${providers.azure.primaryCredentials.subscriptionId}\n\ngoogle:\n
+    \ enabled: ${providers.google.enabled:false}\n\n  accounts:\n    - name: ${providers.google.primaryCredentials.name}\n
+    \     project: ${providers.google.primaryCredentials.project}\n      jsonPath:
+    ${providers.google.primaryCredentials.jsonPath}\n\ncf:\n  enabled: ${providers.cf.enabled:false}\n\n
+    \ accounts:\n    - name: ${providers.cf.primaryCredentials.name}\n      api: ${providers.cf.primaryCredentials.api}\n
+    \     console: ${providers.cf.primaryCredentials.console}\n      org: ${providers.cf.defaultOrg}\n
+    \     space: ${providers.cf.defaultSpace}\n      username: ${providers.cf.account.name:}\n
+    \     password: ${providers.cf.account.password:}\n\nkubernetes:\n  enabled: ${providers.kubernetes.enabled:false}\n
+    \ accounts:\n    - name: ${providers.kubernetes.primaryCredentials.name}\n      serviceAccount:
+    true\n      dockerRegistries:\n      - accountName: dockerhub\n      \n\ndockerRegistry:\n
+    \ \n  enabled: true\n  accounts:\n    - name: dockerhub\n      address: https://index.docker.io\n
+    \     repositories:\n        - library/alpine\n        - library/ubuntu\n        -
+    library/centos\n        - library/nginx\n  \n\ncredentials:\n  primaryAccountTypes:
+    ${providers.aws.primaryCredentials.name}, ${providers.google.primaryCredentials.name},
+    ${providers.cf.primaryCredentials.name}, ${providers.azure.primaryCredentials.name}\n
+    \ challengeDestructiveActionsEnvironments: ${providers.aws.primaryCredentials.name},
+    ${providers.google.primaryCredentials.name}, ${providers.cf.primaryCredentials.name},
+    ${providers.azure.primaryCredentials.name}\n"
+  echo-local.yml: |
+    server:
+      port: ${services.echo.port:8089}
+      address: 0.0.0.0
+
+    cassandra:
+      enabled: false
+
+    spinnaker:
+      inMemory:
+        enabled: true
+      cassandra:
+        enabled: false
+
+    front50:
+      baseUrl: ${services.front50.baseUrl:http://localhost:8080}
+
+    orca:
+      baseUrl: ${services.orca.baseUrl:http://localhost:8083}
+
+    endpoints.health.sensitive: false
+
+    slack:
+      enabled: ${services.echo.notifications.slack.enabled:false}
+      token: ${services.echo.notifications.slack.token}
+
+    spring:
+      mail:
+        host: ${services.echo.notifications.mail.host}
+        port: ${services.echo.notifications.mail.port}
+        username: ${services.echo.notifications.mail.username}
+        password: ${services.echo.notifications.mail.password}
+        properties:
+          mail:
+            smtp:
+              auth:  ${services.echo.notifications.mail.auth:true}
+              ssl:
+                enable: ${services.echo.notifications.mail.ssl:true}
+
+    mail:
+      enabled: ${services.echo.notifications.mail.enabled:false}
+      host: ${services.echo.notifications.mail.host}
+      from: ${services.echo.notifications.mail.fromAddress}
+
+    hipchat:
+      enabled: ${services.echo.notifications.hipchat.enabled:false}
+      baseUrl: ${services.echo.notifications.hipchat.url}
+      token: ${services.echo.notifications.hipchat.token}
+
+    twilio:
+      enabled: ${services.echo.notifications.sms.enabled:false}
+      baseUrl: ${services.echo.notifications.sms.url:https://api.twilio.com/}
+      account: ${services.echo.notifications.sms.account}
+      token: ${services.echo.notifications.sms.token}
+      from: ${services.echo.notifications.sms.from}
+
+    scheduler:
+      enabled: ${services.echo.cron.enabled:true}
+      threadPoolSize: 20
+      triggeringEnabled: true
+      pipelineConfigsPoller:
+        enabled: true
+        pollingIntervalMs: 30000
+  echo.yml: |
+    server:
+      port: ${services.echo.port:8089}
+      address: 0.0.0.0
+
+    cassandra:
+      enabled: false
+      embedded: true
+      host: ${services.cassandra.host:localhost}
+
+    spinnaker:
+      baseUrl: ${services.deck.baseUrl}
+      cassandra:
+         enabled: ${services.echo.cassandra.enabled:true}
+      inMemory:
+         enabled: ${services.echo.inMemory.enabled:false}
+
+    front50:
+      baseUrl: ${services.front50.baseUrl:http://localhost:8080}
+
+    orca:
+      baseUrl: ${services.orca.baseUrl:http://localhost:8083}
+
+    endpoints.health.sensitive: false
+
+    slack:
+      enabled: ${services.echo.notifications.slack.enabled:false}
+      token: ${services.echo.notifications.slack.token}
+
+    spring:
+      mail:
+        host: ${services.echo.notifications.mail.host}
+        port: ${services.echo.notifications.mail.port}
+        username: ${services.echo.notifications.mail.username}
+        password: ${services.echo.notifications.mail.password}
+        properties:
+          mail:
+            smtp:
+              auth:  ${services.echo.notifications.mail.auth:true}
+              ssl:
+                enable: ${services.echo.notifications.mail.ssl:true}
+    mail:
+      enabled: ${services.echo.notifications.mail.enabled:false}
+      host: ${services.echo.notifications.mail.host}
+      from: ${services.echo.notifications.mail.fromAddress}
+
+    hipchat:
+      enabled: ${services.echo.notifications.hipchat.enabled:false}
+      baseUrl: ${services.echo.notifications.hipchat.url}
+      token: ${services.echo.notifications.hipchat.token}
+
+    twilio:
+      enabled: ${services.echo.notifications.sms.enabled:false}
+      baseUrl: ${services.echo.notifications.sms.url:https://api.twilio.com/}
+      account: ${services.echo.notifications.sms.account}
+      token: ${services.echo.notifications.sms.token}
+      from: ${services.echo.notifications.sms.from}
+
+    scheduler:
+      enabled: ${services.echo.cron.enabled:true}
+      threadPoolSize: 20
+      triggeringEnabled: true
+      pipelineConfigsPoller:
+        enabled: true
+        pollingIntervalMs: 30000
+      cron:
+        timezone: ${services.echo.cron.timezone}
+  fiat.yml: |
+    server:
+      port: ${services.fiat.port:7003}
+      address: 0.0.0.0
+
+    redis:
+      connection: ${services.redis.connection:redis://localhost:6379}
+
+    auth:
+      getAll:
+        enabled: false
+  fiat.yml-local: ''
+  front50-local.yml: |
+    server:
+      port: ${services.front50.port:8080}
+      address: 0.0.0.0
+
+    aws:
+      simpleDBEnabled: ${providers.aws.simpleDBEnabled:false}
+      defaultSimpleDBDomain: ${providers.aws.defaultSimpleDBDomain}
+
+    cassandra:
+      enabled: false
+
+    spinnaker:
+      cassandra:
+        enabled: false
+      redis:
+        enabled: false
+      gcs:
+        enabled: ${services.front50.gcs.enabled}
+        project: ${services.front50.gcs.project}
+        jsonPath: /root/.kube/account.json # Don't change this
+        rootFolder: ${services.front50.bucket_root}
+        bucket: ${services.front50.storage_bucket}
+      s3:
+        enabled: ${services.front50.s3.enabled}
+        rootFolder: ${services.front50.bucket_root}
+        bucket: ${services.front50.storage_bucket}
+        endpoint: ${services.front50.s3.endpoint}
+  front50.yml: |
+    server:
+      port: ${services.front50.port:8080}
+      address: ${services.front50.host:localhost}
+
+    cassandra:
+      enabled: ${services.front50.cassandra.enabled:true}
+      embedded: ${services.cassandra.embedded:false}
+      host: ${services.cassandra.host:localhost}
+
+    aws:
+      simpleDBEnabled: ${providers.aws.simpleDBEnabled:false}
+      defaultSimpleDBDomain: ${providers.aws.defaultSimpleDBDomain}
+
+    spinnaker:
+      cassandra:
+        enabled: ${services.front50.cassandra.enabled:true}
+        host: ${services.cassandra.host:localhost}
+        port: ${services.cassandra.port:9042}
+        cluster: ${services.cassandra.cluster:CASS_SPINNAKER}
+        keyspace: front50
+        name: global
+
+      redis:
+        enabled: ${services.front50.redis.enabled:false}
+
+      gcs:
+        enabled: ${services.front50.gcs.enabled:false}
+        bucket: ${services.front50.storage_bucket:}
+        # See https://cloud.google.com/storage/docs/managing-buckets#manage-class-location
+        bucketLocation: ${services.front50.bucket_location:}
+        rootFolder: ${services.front50.bucket_root:front50}
+        project: ${providers.google.primaryCredentials.project}
+        jsonPath: ${providers.google.primaryCredentials.jsonPath}
+
+      aws:
+        enabled: ${services.front50.s3.enabled:false}
+        bucket: ${services.front50.storage_bucket:}
+        rootFolder: ${services.front50.bucket_root:front50}
+        endpoint: ${services.front50.s3.endpoint:}
+  gate.yml: |
+    server:
+      port: ${services.gate.port:8084}
+      address: 0.0.0.0
+      # ssl:
+      #   enabled: false
+      #   keyStore: /opt/spinnaker/gate-tls/keystore.jks
+      #   keyStorePassword: password
+      #   keyAlias: server
+
+    # Circular references since we're already using 'services'
+    # services:
+    #   clouddriver:
+    #     baseUrl: ${services.clouddriver.baseUrl:localhost:7002}
+    #   orca:
+    #     baseUrl: ${services.orca.baseUrl:localhost:8083}
+    #   front50:
+    #     baseUrl: ${services.front50.baseUrl:localhost:8080}
+    # #optional services:
+    #   echo:
+    #     enabled: ${services.echo.enabled:true}
+    #     baseUrl: ${services.echo.baseUrl:8089}
+    #   flapjack:
+    #     enabled: ${services.flapjack.enabled:false}
+    #   igor:
+    #     enabled: ${services.igor.enabled:false}
+    #     baseUrl: ${services.igor.baseUrl:8088}
+
+    cors:
+      allowedOriginsPattern: ^https?://(?:localhost|127.0.0.1|[^/]+\.example\.com)(?::[1-9]\d*)?/?$
+
+    redis:
+      connection: ${services.redis.connection}
+  igor-local.yml: "server:\n  port: ${services.igor.port:8088}\n  address: 0.0.0.0\n\njenkins:\n
+    \ enabled: ${services.jenkins.enabled:false}\n  masters:\n    - name: default\n
+    \     address: ${services.jenkins.defaultMaster.baseUrl}\n      username: ${services.jenkins.defaultMaster.username}\n
+    \     password: ${services.jenkins.defaultMaster.password}\n\ndockerRegistry:\n
+    \ enabled: true\n\nredis:\n  connection: ${services.redis.connection:redis://localhost:6379}\n
+    \ \n# Igor depends on Clouddriver and Echo. These are normally configured\n# in
+    spinnaker[-local].yml (if present), otherwise, uncomment this.\n# services:\n#
+    \  clouddriver:\n#     baseUrl: ${services.clouddriver.baseUrl}\n#   echo:\n#
+    \    baseUrl: ${services.echo.baseUrl}\n"
+  igor.yml: |
+    server:
+      port: ${services.igor.port:8088}
+      address: 0.0.0.0
+
+    jenkins:
+      enabled: ${services.jenkins.enabled:false}
+      masters:
+        - name: default
+          address: ${services.jenkins.defaultMaster.baseUrl}
+          username: ${services.jenkins.defaultMaster.username}
+          password: ${services.jenkins.defaultMaster.password}
+
+    travis:
+      enabled: ${services.travis.enabled:false}
+      masters:
+        - name: ${services.travis.defaultMaster.name}
+          baseUrl: ${services.travis.defaultMaster.baseUrl}
+          address: ${services.travis.defaultMaster.address}
+          githubToken: ${services.travis.defaultMaster.githubToken}
+
+    dockerRegistry:
+      enabled: true
+
+    redis:
+      connection: ${services.redis.connection:redis://localhost:6379}
+
+    # Igor depends on Clouddriver and Echo. These are normally configured
+    # in spinnaker[-local].yml (if present), otherwise, uncomment this.
+    # services:
+    #   clouddriver:
+    #     baseUrl: ${services.clouddriver.baseUrl}
+    #   echo:
+    #     baseUrl: ${services.echo.baseUrl}
+  orca-local.yml: |
+    server:
+        port: ${services.orca.port:8083}
+        address: 0.0.0.0
+
+    oort:
+        baseUrl: ${services.oort.baseUrl:localhost:7002}
+    front50:
+        baseUrl: ${services.front50.baseUrl:localhost:8080}
+    mort:
+        baseUrl: ${services.mort.baseUrl:localhost:7002}
+    kato:
+        baseUrl: ${services.kato.baseUrl:localhost:7002}
+    bakery:
+        baseUrl: ${services.bakery.baseUrl:localhost:8087}
+        extractBuildDetails: ${services.bakery.extractBuildDetails:true}
+    echo:
+        enabled: ${services.echo.enabled:false}
+        baseUrl: ${services.echo.baseUrl:8089}
+
+    igor:
+        baseUrl: ${services.igor.baseUrl:8088}
+
+    # TODO(duftler): Remove this once flex is conditionally-enabled in orca.
+    flex:
+      baseUrl: http://not-a-host
+
+    default:
+      bake:
+        account: ${providers.aws.primaryCredentials.name}
+      securityGroups:
+      vpc:
+        securityGroups:
+
+    redis:
+      connection: ${services.redis.connection}
+
+    script:
+      master: default # name of Jenkins master in Spinnaker
+      job: run-script # from Jenkins job configuration
+  orca.yml: |
+    server:
+        port: ${services.orca.port:8083}
+        address: 0.0.0.0
+
+    oort:
+        baseUrl: ${services.oort.baseUrl:localhost:7002}
+    front50:
+        baseUrl: ${services.front50.baseUrl:localhost:8080}
+    mort:
+        baseUrl: ${services.mort.baseUrl:localhost:7002}
+    kato:
+        baseUrl: ${services.kato.baseUrl:localhost:7002}
+    bakery:
+        baseUrl: ${services.bakery.baseUrl:localhost:8087}
+        extractBuildDetails: ${services.bakery.extractBuildDetails:true}
+        propagateCloudProviderType: ${services.bakery.propagateCloudProviderType:true}
+        allowMissingPackageInstallation: ${services.bakery.allowMissingPackageInstallation:false}
+    echo:
+        enabled: ${services.echo.enabled:false}
+        baseUrl: ${services.echo.baseUrl:8089}
+
+    igor:
+        baseUrl: ${services.igor.baseUrl:8088}
+
+    # TODO(duftler): Remove this once flex is conditionally-enabled in orca.
+    flex:
+      baseUrl: http://not-a-host
+
+    default:
+      bake:
+        account: local
+      securityGroups:
+      vpc:
+        securityGroups:
+
+    redis:
+      connection: ${services.redis.connection}
+
+    tasks:
+      executionWindow:
+        timezone: ${services.orca.timezone}
+
+    script:
+      master: default # name of Jenkins master in Spinnaker
+      job: run-script # from Jenkins job configuration
+  rosco-local.yml: |
+    server:
+      port: ${services.rosco.port:8087}
+      address: 0.0.0.0
+
+    redis:
+      connection: ${services.redis.connection:redis://localhost:6379}
+
+    aws:
+      enabled: ${providers.aws.enabled:false}
+
+    docker:
+      enabled: ${services.docker.enabled:false}
+      bakeryDefaults:
+        targetRepository: ${services.docker.targetRepository}
+
+    google:
+      enabled: ${providers.google.enabled:false}
+      accounts:
+        - name: ${providers.google.primaryCredentials.name}
+          project: ${providers.google.primaryCredentials.project}
+          jsonPath: ${providers.google.primaryCredentials.jsonPath}
+      gce:
+        bakeryDefaults:
+          zone: ${providers.google.defaultZone}
+
+    rosco:
+      configDir: ${services.rosco.configDir}
+  rosco.yml: |
+    server:
+      port: ${services.rosco.port:8087}
+      address: 0.0.0.0
+
+    redis:
+      connection: ${services.redis.connection:redis://localhost:6379}
+
+    aws:
+      enabled: ${providers.aws.enabled:false}
+
+    docker:
+      enabled: ${services.docker.enabled:false}
+      bakeryDefaults:
+        targetRepository: ${services.docker.targetRepository}
+
+    google:
+      enabled: ${providers.google.enabled:false}
+      accounts:
+        - name: ${providers.google.primaryCredentials.name}
+          project: ${providers.google.primaryCredentials.project}
+          jsonPath: ${providers.google.primaryCredentials.jsonPath}
+      gce:
+        bakeryDefaults:
+          zone: ${providers.google.defaultZone}
+
+    rosco:
+      configDir: ${services.rosco.configDir}
+  settings.js: |
+    'use strict';
+
+    var feedbackUrl = 'http://localhost';
+    var gateHost = '/gate';
+    var bakeryDetailUrl = gateHost + '/bakery/logs/global/{{ context.status.id }}';
+
+    window.spinnakerSettings = {
+      defaultProviders: ['kubernetes'],
+      feedbackUrl: feedbackUrl,
+      gateUrl: gateHost,
+      bakeryDetailUrl: bakeryDetailUrl,
+      pollSchedule: 30000,
+      defaultTimeZone: 'America/Los_Angeles', // see http://momentjs.com/timezone/docs/#/data-utilities/
+      providers: {
+        kubernetes: {
+          defaults: {
+            account: 'local',
+            namespace: 'default'
+          },
+        }
+      },
+      notifications: {
+        email: {
+          enabled: false,
+        },
+        hipchat: {
+          enabled: false,
+          botName: 'Spinnaker Bot'
+        },
+        sms: {
+          enabled: false,
+        },
+        slack: {
+          enabled: false,
+          botName: 'spinnakerbot'
+        }
+      },
+      whatsNew: {
+        gistId: '32526cd608db3d811b38',
+        fileName: 'news.md',
+      },
+      feature: {
+        pipelines: true,
+        jobs: true,
+        notifications: true,
+        fastProperty: false,
+        vpcMigrator: false,
+        clusterDiff: false,
+        roscoMode: false,
+        netflixMode: false,
+        infrastructureStages: true, // Should 'createLoadBalancer' be a pipeline stage? (no).
+      },
+    };
+  spinnaker-local.yml: "global:\n  spinnaker:\n    environment: test\n\nservices:\n
+    \ default:\n    # These defaults can be modified to change all the spinnaker subsystems\n
+    \   # (clouddriver, gate, etc) at once, but not external systems (jenkins, etc).\n
+    \   # Individual systems can still be overridden using their own section entry\n
+    \   # directly under 'services'.\n    host: localhost\n    protocol: http\n\n
+    \ clouddriver:\n    host: clouddriver.spnnaker.youxian.com\n    port: 7002\n    baseUrl:
+    ${services.default.protocol}://${services.clouddriver.host}:${services.clouddriver.port}\n
+    \   # Controls whether UserDataProviders are used to populate user data of new
+    server groups.\n    # If false, user data is copied over from ancestor server
+    groups on both CopyLastAsgAtomicOperation and\n    # ModifyAsgLaunchConfigurationOperation
+    (only if no user data is provided on the given request).\n    aws:\n      udf:\n
+    \       enabled: false\n\n  echo:\n    enabled: true\n    host: echo.spnnaker.youxian.com\n
+    \   port: 8089\n    baseUrl: ${services.default.protocol}://${services.echo.host}:${services.echo.port}\n
+    \   cron:\n      enabled: true\n    notifications:\n      # allow pipeline triggers
+    to run periodically via cron expressions\n      # If you wish for spinnaker to
+    send notifications, configure the following blocks\n      mail:\n        enabled:
+    false\n        host: smtp.example.org\n        username: admin\n        password:
+    admin\n        fromAddress: spinnaker@example.org\n        port: 25\n      hipchat:\n
+    \       enabled: false\n        url: # the hipchat server to connect to\n        token:
+    #the hipchat auth token\n      sms:\n        enabled: false\n        account:
+    # twilio account id\n        token: # twilio auth token\n        from: # phone
+    number by which sms messages are sent\n      slack:\n        enabled: false\n
+    \       token: \n\n  deck:\n    host: deck.spnnaker.youxian.com\n    port: 9000\n
+    \   baseUrl: ${services.default.protocol}://${services.deck.host}:${services.deck.port}\n
+    \   gateUrl: ${services.gate.baseUrl}\n    bakeryUrl: ${services.bakery.baseUrl}\n
+    \   timezone: 'America/New_York'\n    auth:\n      enabled: false\n\n  front50:\n
+    \   host: front50.spnnaker.youxian.com\n    port: 8080\n    baseUrl: ${services.default.protocol}://${services.front50.host}:${services.front50.port}\n\n
+    \   # If using storage bucket persistence (gcs or s3), specify the bucket here\n
+    \   # disable cassandra and enable the storage service below.\n    storage_bucket:
+    spinnaker\n    bucket_root: front50\n\n    cassandra:\n      enabled: false\n
+    \   redis:\n      enabled: false\n    \n    gcs:\n      enabled: false\n    s3:\n
+    \     enabled: true\n      endpoint: http://spinnaker-minio-svc:9000\n    \n  gate:\n
+    \   host: gate.spnnaker.youxian.com\n    port: 8084\n    baseUrl: ${services.default.protocol}://${services.gate.host}:${services.gate.port}/gate\n\n
+    \ igor:\n    # If you are integrating Jenkins then you must also enable Spinnaker's\n
+    \   # \"igor\" subsystem.\n    enabled: true\n    host: igor.spnnaker.youxian.com\n
+    \   port: 8088\n    baseUrl: ${services.default.protocol}://${services.igor.host}:${services.igor.port}\n\n
+    \ kato:\n    host: ${services.clouddriver.host}\n    port: ${services.clouddriver.port}\n
+    \   baseUrl: ${services.clouddriver.baseUrl}\n\n  mort:\n    host: ${services.clouddriver.host}\n
+    \   port: ${services.clouddriver.port}\n    baseUrl: ${services.clouddriver.baseUrl}\n\n
+    \ orca:\n    host: orca.spnnaker.youxian.com\n    port: 8083\n    baseUrl: ${services.default.protocol}://${services.orca.host}:${services.orca.port}\n
+    \   enabled: true\n\n  oort:\n    host: ${services.clouddriver.host}\n    port:
+    ${services.clouddriver.port}\n    baseUrl: ${services.clouddriver.baseUrl}\n\n
+    \ rosco:\n    host: rosco.spnnaker.youxian.com\n    port: 8087\n    baseUrl: ${services.default.protocol}://${services.rosco.host}:${services.rosco.port}\n
+    \   # You need to provide the fully-qualified path to the directory containing
+    the packer templates.\n    # They typically live in rosco's config/packer directory.\n
+    \   configDir: /opt/rosco/config/packer\n\n  bakery:\n    host: ${services.rosco.host}\n
+    \   port: ${services.rosco.port}\n    baseUrl: ${services.rosco.baseUrl}\n    extractBuildDetails:
+    true\n\n  docker:\n    # This target repository is used by the bakery to publish
+    baked docker images.\n    # Do not include http://.\n    enabled: true\n    targetRepository:
+    viglesiasce/sample-app\n\n  jenkins:\n    # The \"name\" entry is used for the
+    display name when selecting\n    # this server. You must set `enabled` to true
+    when enabling igor.\n    #\n    # If you have multiple jenkins servers, you will
+    need to list\n    # them in an igor-local.yml. See jenkins.masters in config/igor.yml.\n
+    \   #\n    # Note that jenkins is not installed with Spinnaker so you must obtain
+    this\n    # on your own if you are interested.\n    enabled: true\n    defaultMaster:\n
+    \     name: default\n      baseUrl: http://jenkins.spnnaker.youxian.com:8080/\n      username:
+    admin\n      password: admin\n\n  redis:\n    host: redis.spnnaker.youxian.com\n    port:
+    6379\n    connection: redis://:password@${services.redis.host}:${services.redis.port}\n\nproviders:\n\n
+    \ kubernetes:\n    enabled: true\n    primaryCredentials:\n      name: local\n
+    \     namespace: default\n      dockerRegistryAccount: dockerhub\n\n  dockerRegistry:\n
+    \   enabled: true\n    primaryCredentials:\n      name: dockerhub\n      address:
+    https://index.docker.io\n      repository: vic-goog/gceme\n"
+  spinnaker.yml: |2
+
+    # This file is intended to serve as a master configuration for a Spinnaker
+    # deployment. Customizations to the deployment should be made in another file
+    # named "spinnaker-local.yml". The distribution has a prototype called
+    # "default-spinnaker-local.yml" which calls out the subset of attributes of
+    # general interest. It can be copied into a "spinnaker-local.yml" to start
+    # with. The prototype does not change any of the default values here, it just
+    # surfaces the more critical attributes.
+
+    global:
+      spinnaker:
+        environment: test
+        timezone: 'America/Los_Angeles'
+
+    services:
+      default:
+        # These defaults can be modified to change all the spinnaker subsystems
+        # (clouddriver, gate, etc) at once, but not external systems (jenkins, etc).
+        # Individual systems can still be overridden using their own section entry
+        # directly under 'services'.
+        host: localhost
+        protocol: http
+
+      clouddriver:
+        host: ${services.default.host}
+        port: 7002
+        baseUrl: ${services.default.protocol}://${services.clouddriver.host}:${services.clouddriver.port}
+        aws:
+          udf:
+            # Controls whether UserDataProviders are used to populate user data of
+            # new server groups. If false, user data is copied over from ancestor
+            # server groups on both CopyLastAsgAtomicOperation and
+            # ModifyAsgLaunchConfigurationOperation (only if no user data is
+            # provided on the given request).
+            enabled: true
+
+      echo:
+        enabled: true
+        host: ${services.default.host}
+        port: 8089
+        baseUrl: ${services.default.protocol}://${services.echo.host}:${services.echo.port}
+
+        cron:
+          # Allow pipeline triggers to run periodically via cron expressions.
+          enabled: true
+          timezone: ${global.spinnaker.timezone}
+
+        notifications:
+          # The following blocks can enable Spinnaker to send notifications
+          # using the corresponding mechanism.
+          # See https://www.spinnaker.io/setup/features/notifications/
+          # for more information.
+          mail:
+            enabled: ${services.echo.notifications.mail.enabled:false}
+            host: ${services.echo.notifications.mail.host}
+            from: ${services.echo.notifications.mail.fromAddress}
+            username: ${services.echo.notifications.mail.username}
+            password: ${services.echo.notifications.mail.password}
+            port: ${services.echo.notifications.mail.port}
+          hipchat:
+            enabled: false
+            url: # the hipchat server to connect to
+            token: # the hipchat auth token
+            botName: # the username of the bot
+          sms:
+            enabled: false
+            account: # twilio account id
+            token: # twilio auth token
+            from: # phone number by which sms messages are sent
+          slack:
+            enabled: ${services.echo.notifications.slack.enabled:false}
+            token: ${services.echo.notifications.slack.token}
+
+      deck:
+        host: ${services.default.host}
+        port: 9000
+        baseUrl: ${services.default.protocol}://${services.deck.host}:${services.deck.port}
+        gateUrl: ${services.gate.baseUrl}
+        bakeryUrl: ${services.bakery.baseUrl}
+        timezone: ${global.spinnaker.timezone}
+        auth:
+          enabled: false
+
+      fiat:
+        enabled: false
+        host: ${services.default.host}
+        port: 7003
+        baseUrl: ${services.default.protocol}://${services.fiat.host}:${services.fiat.port}
+
+      front50:
+        host: ${services.default.host}
+        port: 8080
+        baseUrl: ${services.default.protocol}://${services.front50.host}:${services.front50.port}
+
+        # If using storage bucket persistence (gcs or s3), specify the bucket here
+        # disable cassandra and enable the storage service below.
+        storage_bucket: ${services.front50.storage_bucket}
+        # (GCS Only) Location for bucket.
+        bucket_location:
+        bucket_root: front50
+
+        cassandra:
+          enabled: false
+        redis:
+          enabled: false
+        gcs:
+          enabled: ${services.front50.gcs.enabled} # Enable me
+          project: ${services.front50.gcs.project}
+        s3:
+          enabled: ${services.front50.s3.enabled} # Or me
+          endpoint: ${services.front50.s3.endpoint}
+
+      gate:
+        host: ${services.default.host}
+        port: 8084
+        baseUrl: ${services.default.protocol}://${services.gate.host}:${services.gate.port}
+
+      igor:
+        # If you are integrating Jenkins then you must also enable Spinnaker's
+        # "igor" subsystem.
+        enabled: false
+        host: ${services.default.host}
+        port: 8088
+        baseUrl: ${services.default.protocol}://${services.igor.host}:${services.igor.port}
+
+      kato:
+        host: ${services.clouddriver.host}
+        port: ${services.clouddriver.port}
+        baseUrl: ${services.clouddriver.baseUrl}
+
+      mort:
+        host: ${services.clouddriver.host}
+        port: ${services.clouddriver.port}
+        baseUrl: ${services.clouddriver.baseUrl}
+
+      orca:
+        host: ${services.default.host}
+        port: 8083
+        baseUrl: ${services.default.protocol}://${services.orca.host}:${services.orca.port}
+        timezone: ${global.spinnaker.timezone}
+        enabled: true
+
+      oort:
+        host: ${services.clouddriver.host}
+        port: ${services.clouddriver.port}
+        baseUrl: ${services.clouddriver.baseUrl}
+
+      rosco:
+        host: ${services.default.host}
+        port: 8087
+        baseUrl: ${services.default.protocol}://${services.rosco.host}:${services.rosco.port}
+        # You need to provide the fully-qualified path to the directory containing the packer templates.
+        # They typically live in rosco's config/packer directory.
+        configDir: /opt/rosco/config/packer
+
+      bakery:
+        host: ${services.rosco.host}
+        port: ${services.rosco.port}
+        baseUrl: ${services.rosco.baseUrl}
+        extractBuildDetails: true
+        propagateCloudProviderType: true
+        allowMissingPackageInstallation: false
+
+      docker:
+        # This target repository is used by the bakery to publish baked docker images.
+        # Do not include http://.
+        enabled: ${services.docker.enabled:false}
+        targetRepository: ${services.docker.targetRepository}
+
+      jenkins:
+        # The "name" entry is used for the display name when selecting
+        # this server. You must set `enabled` to true when enabling igor.
+        #
+        # If you have multiple jenkins servers, you will need to list
+        # them in an igor-local.yml. See jenkins.masters in config/igor.yml.
+        #
+        # Note that jenkins is not installed with Spinnaker so you must obtain this
+        # on your own if you are interested.
+        enabled: ${services.igor.enabled:false}
+        defaultMaster:
+          name: Jenkins
+          baseUrl:   # Expected in spinnaker-local.yml
+          username:  # Expected in spinnaker-local.yml
+          password:  # Expected in spinnaker-local.yml
+
+      redis:
+        host: ${services.default.host}
+        port: 6379
+        connection: redis://${services.redis.host}:${services.redis.port}
+
+      cassandra:
+        # cassandra.enabled is no longer used
+        # cassandra is enabled or disabled on a per-service basis
+        # where the alternative persistence mechanism for that service
+        # can be enabled.
+        host: ${services.cassandra.host}
+        port: ${services.cassandra.port}
+        embedded: ${services.cassandra.embedded}
+        cluster: ${services.cassandra.cluster}
+
+    providers:
+      aws:
+        # For more information on configuring Amazon Web Services (aws), see
+        # https://www.spinnaker.io/setup/providers/aws/
+
+        enabled: false
+        simpleDBEnabled: false
+        defaultRegion: us-east-1
+        defaultSimpleDBDomain: CLOUD_APPLICATIONS
+        primaryCredentials:
+          name: default
+          # The actual credentials are set using a standard AWS client library mechanism
+          # http://docs.aws.amazon.com/AWSSdkDocsJava/latest/DeveloperGuide/credentials.html
+          # Typically this is a $HOME/.aws/credentials file (remember, a standard
+          # spinnaker installation runs as user "spinnaker" whose $HOME is
+          # /home/spinnaker). The primaryCredentials.name will identify which profile
+          # to use (for .aws/credentials).
+
+        # {{name}} will be interpolated with the aws account name (e.g. "my-aws-account-keypair").
+        defaultKeyPairTemplate: "{{name}}-keypair"
+
+      google:
+        # For more information on configuring Google Cloud Platform (google), see
+        # https://www.spinnaker.io/setup/providers/gce/
+
+        enabled: false
+        defaultRegion: us-central1
+        defaultZone: us-central1-f
+        primaryCredentials:
+          name: my-account-name
+          # The project is the Google Project ID for the project to manage with
+          # Spinnaker. The jsonPath is a path to the JSON service credentials
+          # downloaded from the Google Developer's Console.
+          project:
+          jsonPath:
+
+      azure:
+        # For more information on configuring Microsoft Azure (azure), see
+        # https://www.spinnaker.io/setup/providers/azure/
+
+        enabled: false
+        defaultRegion: westus
+        primaryCredentials:
+          name: my-azure-account
+
+          # To set Azure credentials, enter your Azure supscription values for:
+          # clientId, appKey, tenantId, and subscriptionId.
+          clientId:
+          appKey:
+          tenantId:
+          subscriptionId:
+
+      kubernetes:
+        # For more information on configuring Kubernetes clusters (kubernetes), see
+        # https://www.spinnaker.io/setup/providers/kubernetes/
+
+        # NOTE: enabling kubernetes also requires enabling dockerRegistry.
+        enabled: ${providers.kubernetes.enabled}
+        primaryCredentials:
+          name: ${providers.kubernetes.primaryCredentials.name}
+          namespace: ${providers.kubernetes.primaryCredentials.namespace}
+          dockerRegistryAccount: ${providers.dockerRegistry.primaryCredentials.name}
+
+      dockerRegistry:
+        # If you want to use a container based provider, you need to configure and
+        # enable this provider to cache images.
+        enabled: ${providers.dockerRegistry.enabled}
+        primaryCredentials:
+          name: ${providers.dockerRegistry.primaryCredentials.name}
+          address: ${providers.dockerRegistry.primaryCredentials.address}
+          repository: ${providers.dockerRegistry.primaryCredentials.repository}

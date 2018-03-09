@@ -1,42 +1,21 @@
-{
-  "kind": "PersistentVolumeClaim",
-  "apiVersion": "v1",
-  "metadata": {
-    "name": "spinnaker-jenkins",
-    "namespace": "spinnaker",
-    "selfLink": "/api/v1/namespaces/spinnaker/persistentvolumeclaims/spinnaker-jenkins",
-    "uid": "95b6f08b-2346-11e8-baf7-06dec40001b5",
-    "resourceVersion": "143939",
-    "creationTimestamp": "2018-03-09T03:04:30Z",
-    "labels": {
-      "app": "spinnaker-jenkins",
-      "chart": "jenkins-0.14.0",
-      "heritage": "Tiller",
-      "release": "spinnaker"
-    },
-    "annotations": {
-      "pv.kubernetes.io/bind-completed": "yes",
-      "pv.kubernetes.io/bound-by-controller": "yes"
-    }
-  },
-  "spec": {
-    "accessModes": [
-      "ReadWriteOnce"
-    ],
-    "resources": {
-      "requests": {
-        "storage": "8Gi"
-      }
-    },
-    "volumeName": "jenkins-pv"
-  },
-  "status": {
-    "phase": "Bound",
-    "accessModes": [
-      "ReadWriteOnce"
-    ],
-    "capacity": {
-      "storage": "8Gi"
-    }
-  }
-}
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: spinnaker-jenkins
+  namespace: spinnaker
+  labels:
+    app: spinnaker-jenkins
+    chart: jenkins-0.14.0
+    heritage: Tiller
+    release: spinnaker
+  annotations:
+    pv.kubernetes.io/bind-completed: 'yes'
+    pv.kubernetes.io/bound-by-controller: 'yes'
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  volumeName: jenkins-pv

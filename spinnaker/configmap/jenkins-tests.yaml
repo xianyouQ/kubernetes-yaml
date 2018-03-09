@@ -1,15 +1,11 @@
-{
-  "kind": "ConfigMap",
-  "apiVersion": "v1",
-  "metadata": {
-    "name": "spinnaker-jenkins-tests",
-    "namespace": "spinnaker",
-    "selfLink": "/api/v1/namespaces/spinnaker/configmaps/spinnaker-jenkins-tests",
-    "uid": "95b37dfd-2346-11e8-baf7-06dec40001b5",
-    "resourceVersion": "143624",
-    "creationTimestamp": "2018-03-09T03:04:30Z"
-  },
-  "data": {
-    "run.sh": "@test \"Testing Jenkins UI is accessible\" {\n  curl --retry 48 --retry-delay 10 spinnaker-jenkins:8080/login\n}"
-  }
-}
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: spinnaker-jenkins-tests
+  namespace: spinnaker
+data:
+  run.sh: |-
+    @test "Testing Jenkins UI is accessible" {
+      curl --retry 48 --retry-delay 10 spinnaker-jenkins:8080/login
+    }

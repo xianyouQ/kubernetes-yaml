@@ -1,36 +1,20 @@
-{
-  "kind": "Service",
-  "apiVersion": "v1",
-  "metadata": {
-    "name": "spinnaker-jenkins-agent",
-    "namespace": "spinnaker",
-    "selfLink": "/api/v1/namespaces/spinnaker/services/spinnaker-jenkins-agent",
-    "uid": "95b81a33-2346-11e8-baf7-06dec40001b5",
-    "resourceVersion": "143636",
-    "creationTimestamp": "2018-03-09T03:04:30Z",
-    "labels": {
-      "app": "spinnaker-jenkins",
-      "chart": "jenkins-0.14.0",
-      "component": "spinnaker-jenkins-master"
-    }
-  },
-  "spec": {
-    "ports": [
-      {
-        "name": "slavelistener",
-        "protocol": "TCP",
-        "port": 50000,
-        "targetPort": 50000
-      }
-    ],
-    "selector": {
-      "component": "spinnaker-jenkins-master"
-    },
-    "clusterIP": "192.168.177.125",
-    "type": "ClusterIP",
-    "sessionAffinity": "None"
-  },
-  "status": {
-    "loadBalancer": {}
-  }
-}
+kind: Service
+apiVersion: v1
+metadata:
+  name: spinnaker-jenkins-agent
+  namespace: spinnaker
+  labels:
+    app: spinnaker-jenkins
+    chart: jenkins-0.14.0
+    component: spinnaker-jenkins-master
+spec:
+  ports:
+  - name: slavelistener
+    protocol: TCP
+    port: 50000
+    targetPort: 50000
+  selector:
+    component: spinnaker-jenkins-master
+  clusterIP: None
+  type: ClusterIP
+  sessionAffinity: None

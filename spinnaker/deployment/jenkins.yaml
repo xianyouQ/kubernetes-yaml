@@ -1,234 +1,133 @@
-{
-  "kind": "Deployment",
-  "apiVersion": "extensions/v1beta1",
-  "metadata": {
-    "name": "spinnaker-jenkins",
-    "namespace": "spinnaker",
-    "selfLink": "/apis/extensions/v1beta1/namespaces/spinnaker/deployments/spinnaker-jenkins",
-    "uid": "95bfc670-2346-11e8-baf7-06dec40001b5",
-    "resourceVersion": "143713",
-    "generation": 1,
-    "creationTimestamp": "2018-03-09T03:04:30Z",
-    "labels": {
-      "chart": "jenkins-0.14.0",
-      "component": "spinnaker-jenkins-master",
-      "heritage": "Tiller",
-      "release": "spinnaker"
-    },
-    "annotations": {
-      "deployment.kubernetes.io/revision": "1"
-    }
-  },
-  "spec": {
-    "replicas": 1,
-    "selector": {
-      "matchLabels": {
-        "component": "spinnaker-jenkins-master"
-      }
-    },
-    "template": {
-      "metadata": {
-        "creationTimestamp": null,
-        "labels": {
-          "app": "spinnaker-jenkins",
-          "chart": "jenkins-0.14.0",
-          "component": "spinnaker-jenkins-master",
-          "heritage": "Tiller",
-          "release": "spinnaker"
-        },
-        "annotations": {
-          "checksum/config": "5ee6a4cc732a81da16a29a3331c8d1a2da1a10a5814b602a322df6f7d6d73564"
-        }
-      },
-      "spec": {
-        "volumes": [
-          {
-            "name": "jenkins-config",
-            "configMap": {
-              "name": "spinnaker-jenkins",
-              "defaultMode": 420
-            }
-          },
-          {
-            "name": "plugin-dir",
-            "emptyDir": {}
-          },
-          {
-            "name": "secrets-dir",
-            "emptyDir": {}
-          },
-          {
-            "name": "jenkins-home",
-            "persistentVolumeClaim": {
-              "claimName": "spinnaker-jenkins"
-            }
-          }
-        ],
-        "initContainers": [
-          {
-            "name": "copy-default-config",
-            "image": "jenkins/jenkins:lts",
-            "command": [
-              "sh",
-              "/var/jenkins_config/apply_config.sh"
-            ],
-            "resources": {},
-            "volumeMounts": [
-              {
-                "name": "jenkins-home",
-                "mountPath": "/var/jenkins_home"
-              },
-              {
-                "name": "jenkins-config",
-                "mountPath": "/var/jenkins_config"
-              },
-              {
-                "name": "plugin-dir",
-                "mountPath": "/usr/share/jenkins/ref/plugins/"
-              },
-              {
-                "name": "secrets-dir",
-                "mountPath": "/usr/share/jenkins/ref/secrets/"
-              }
-            ],
-            "terminationMessagePath": "/dev/termination-log",
-            "terminationMessagePolicy": "File",
-            "imagePullPolicy": "Always"
-          }
-        ],
-        "containers": [
-          {
-            "name": "spinnaker-jenkins",
-            "image": "jenkins/jenkins:lts",
-            "args": [
-              "--argumentsRealm.passwd.$(ADMIN_USER)=$(ADMIN_PASSWORD)",
-              "--argumentsRealm.roles.$(ADMIN_USER)=admin"
-            ],
-            "ports": [
-              {
-                "name": "http",
-                "containerPort": 8080,
-                "protocol": "TCP"
-              },
-              {
-                "name": "slavelistener",
-                "containerPort": 50000,
-                "protocol": "TCP"
-              }
-            ],
-            "env": [
-              {
-                "name": "JAVA_OPTS"
-              },
-              {
-                "name": "JENKINS_OPTS"
-              },
-              {
-                "name": "ADMIN_PASSWORD",
-                "valueFrom": {
-                  "secretKeyRef": {
-                    "name": "spinnaker-jenkins",
-                    "key": "jenkins-admin-password"
-                  }
-                }
-              },
-              {
-                "name": "ADMIN_USER",
-                "valueFrom": {
-                  "secretKeyRef": {
-                    "name": "spinnaker-jenkins",
-                    "key": "jenkins-admin-user"
-                  }
-                }
-              }
-            ],
-            "resources": {
-              "requests": {
-                "cpu": "500m",
-                "memory": "512Mi"
-              }
-            },
-            "volumeMounts": [
-              {
-                "name": "jenkins-home",
-                "mountPath": "/var/jenkins_home"
-              },
-              {
-                "name": "jenkins-config",
-                "readOnly": true,
-                "mountPath": "/var/jenkins_config"
-              },
-              {
-                "name": "plugin-dir",
-                "mountPath": "/usr/share/jenkins/ref/plugins/"
-              },
-              {
-                "name": "secrets-dir",
-                "mountPath": "/usr/share/jenkins/ref/secrets/"
-              }
-            ],
-            "livenessProbe": {
-              "httpGet": {
-                "path": "/login",
-                "port": "http",
-                "scheme": "HTTP"
-              },
-              "initialDelaySeconds": 60,
-              "timeoutSeconds": 1,
-              "periodSeconds": 10,
-              "successThreshold": 1,
-              "failureThreshold": 3
-            },
-            "readinessProbe": {
-              "httpGet": {
-                "path": "/login",
-                "port": "http",
-                "scheme": "HTTP"
-              },
-              "initialDelaySeconds": 60,
-              "timeoutSeconds": 1,
-              "periodSeconds": 10,
-              "successThreshold": 1,
-              "failureThreshold": 3
-            },
-            "terminationMessagePath": "/dev/termination-log",
-            "terminationMessagePolicy": "File",
-            "imagePullPolicy": "Always"
-          }
-        ],
-        "restartPolicy": "Always",
-        "terminationGracePeriodSeconds": 30,
-        "dnsPolicy": "ClusterFirst",
-        "serviceAccountName": "default",
-        "serviceAccount": "default",
-        "securityContext": {
-          "runAsUser": 0
-        },
-        "schedulerName": "default-scheduler"
-      }
-    },
-    "strategy": {
-      "type": "RollingUpdate",
-      "rollingUpdate": {
-        "maxUnavailable": 1,
-        "maxSurge": 1
-      }
-    }
-  },
-  "status": {
-    "observedGeneration": 1,
-    "replicas": 1,
-    "updatedReplicas": 1,
-    "unavailableReplicas": 1,
-    "conditions": [
-      {
-        "type": "Available",
-        "status": "True",
-        "lastUpdateTime": "2018-03-09T03:04:30Z",
-        "lastTransitionTime": "2018-03-09T03:04:30Z",
-        "reason": "MinimumReplicasAvailable",
-        "message": "Deployment has minimum availability."
-      }
-    ]
-  }
-}
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: spinnaker-jenkins
+  namespace: spinnaker
+  labels:
+    chart: jenkins-0.14.0
+    component: spinnaker-jenkins-master
+    heritage: Tiller
+    release: spinnaker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: spinnaker-jenkins-master
+  template:
+    metadata:
+      creationTimestamp: 
+      labels:
+        app: spinnaker-jenkins
+        chart: jenkins-0.14.0
+        component: spinnaker-jenkins-master
+        heritage: Tiller
+        release: spinnaker
+    spec:
+      volumes:
+      - name: jenkins-config
+        configMap:
+          name: spinnaker-jenkins
+          defaultMode: 420
+      - name: plugin-dir
+        emptyDir: {}
+      - name: secrets-dir
+        emptyDir: {}
+      - name: jenkins-home
+        persistentVolumeClaim:
+          claimName: spinnaker-jenkins
+      initContainers:
+      - name: copy-default-config
+        image: jenkins/jenkins:lts
+        command:
+        - sh
+        - "/var/jenkins_config/apply_config.sh"
+        resources: {}
+        volumeMounts:
+        - name: jenkins-home
+          mountPath: "/var/jenkins_home"
+        - name: jenkins-config
+          mountPath: "/var/jenkins_config"
+        - name: plugin-dir
+          mountPath: "/usr/share/jenkins/ref/plugins/"
+        - name: secrets-dir
+          mountPath: "/usr/share/jenkins/ref/secrets/"
+        terminationMessagePath: "/dev/termination-log"
+        terminationMessagePolicy: File
+        imagePullPolicy: Always
+      containers:
+      - name: spinnaker-jenkins
+        image: jenkins/jenkins:lts
+        args:
+        - "--argumentsRealm.passwd.$(ADMIN_USER)=$(ADMIN_PASSWORD)"
+        - "--argumentsRealm.roles.$(ADMIN_USER)=admin"
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        - name: slavelistener
+          containerPort: 50000
+          protocol: TCP
+        env:
+        - name: JAVA_OPTS
+        - name: JENKINS_OPTS
+        - name: ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: spinnaker-jenkins
+              key: jenkins-admin-password
+        - name: ADMIN_USER
+          valueFrom:
+            secretKeyRef:
+              name: spinnaker-jenkins
+              key: jenkins-admin-user
+        resources:
+          requests:
+            cpu: 500m
+            memory: 512Mi
+        volumeMounts:
+        - name: jenkins-home
+          mountPath: "/var/jenkins_home"
+        - name: jenkins-config
+          readOnly: true
+          mountPath: "/var/jenkins_config"
+        - name: plugin-dir
+          mountPath: "/usr/share/jenkins/ref/plugins/"
+        - name: secrets-dir
+          mountPath: "/usr/share/jenkins/ref/secrets/"
+        livenessProbe:
+          httpGet:
+            path: "/login"
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 60
+          timeoutSeconds: 1
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: "/login"
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 60
+          timeoutSeconds: 1
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+        terminationMessagePath: "/dev/termination-log"
+        terminationMessagePolicy: File
+        imagePullPolicy: Always
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      serviceAccountName: default
+      serviceAccount: default
+      securityContext:
+        runAsUser: 0
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1

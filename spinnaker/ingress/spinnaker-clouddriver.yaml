@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: clouddriver-ingress
+  namespace: spinnaker
+spec:
+  rules:
+  - host: clouddriver.spnnaker.youxian.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: spinnaker-spinnaker-clouddriver
+          servicePort: 7002
