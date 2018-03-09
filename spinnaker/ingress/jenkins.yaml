@@ -5,7 +5,7 @@ metadata:
   namespace: spinnaker
 spec:
   rules:
-  - host: jenkins.spnnaker.youxian.com
+  - host: jenkins.spinnaker.youxian.com
     http:
       paths:
       - path: /

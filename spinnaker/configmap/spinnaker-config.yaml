@@ -587,7 +587,7 @@ data:
     need to list\n    # them in an igor-local.yml. See jenkins.masters in config/igor.yml.\n
     \   #\n    # Note that jenkins is not installed with Spinnaker so you must obtain
     this\n    # on your own if you are interested.\n    enabled: true\n    defaultMaster:\n
-    \     name: default\n      baseUrl: http://jenkins.spnnaker.youxian.com/\n      username:
+    \     name: default\n      baseUrl: http://jenkins.spinnaker.youxian.com/\n      username:
     admin\n      password: admin\n\n  redis:\n    host: redis.spnnaker.youxian.com\n    port:
     6379\n    connection: redis://:password@${services.redis.host}:${services.redis.port}\n\nproviders:\n\n
     \ kubernetes:\n    enabled: true\n    primaryCredentials:\n      name: local\n
