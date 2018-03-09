@@ -237,7 +237,7 @@ data:
     spinnaker:
       cassandra:
         enabled: ${services.front50.cassandra.enabled:true}
-        host: ${services.cassandra.host:localhost}
+        host: ${services.cassandra.host:cassandra.spinnaker.youxian.com}
         port: ${services.cassandra.port:9042}
         cluster: ${services.cassandra.cluster:CASS_SPINNAKER}
         keyspace: front50

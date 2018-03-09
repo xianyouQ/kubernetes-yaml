@@ -9,7 +9,7 @@ metadata:
     heritage: Tiller
     release: spinnaker
 data:
-  orca.yml:
+  orca.yml: |-
     server:
       port: 8084
 
@@ -110,7 +110,6 @@ data:
 
     spring.session.store-type: redis
 
-    ---
 
     spring:
       profiles: googleOAuth
@@ -131,7 +130,7 @@ data:
           firstName: given_name
           lastName: family_name
 
-    ---
+    #---
 
     spring:
       profiles: azureOAuth
@@ -153,7 +152,7 @@ data:
           firstName: givenName
           lastName: surname
 
-    ---
+    #---
 
     spring:
       profiles: githubOAuth

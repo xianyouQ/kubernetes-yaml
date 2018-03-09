@@ -29,6 +29,10 @@ spec:
         secret:
           secretName: spinnaker-spinnaker-registry
           defaultMode: 420
+      - name: spinnaker-clouddriver-config
+        configMap:
+          name: spinnaker-clouddriver-config
+          defaultMode: 0644
       containers:
       - name: clouddriver
         image: gcr.io/spinnaker-marketplace/clouddriver:2.0.0-20180221152902
@@ -42,6 +46,8 @@ spec:
           mountPath: "/opt/spinnaker/config"
         - name: spinnaker-spinnaker-registry
           mountPath: "/tmp/registry"
+        - name: spinnaker-clouddriver-config
+          mountPath: "/opt/clouddriver/config"
         readinessProbe:
           httpGet:
             path: "/health"

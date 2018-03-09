@@ -29,7 +29,6 @@ spec:
         configMap:
           name: spinnaker-spinnaker-spinnaker-config
           defaultMode: 420
-      volumes:
       - name: spinnaker-gate-config
         configMap:
           name: spinnaker-gate-config
