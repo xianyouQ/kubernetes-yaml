@@ -456,7 +456,7 @@ data:
       address: 0.0.0.0
 
     redis:
-      connection: ${services.redis.connection:redis://localhost:6379}
+      connection: ${services.redis.connection:redis://redis.spinnaker.youxian.com:6379}
 
     aws:
       enabled: ${providers.aws.enabled:false}

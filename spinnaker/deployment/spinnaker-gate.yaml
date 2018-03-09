@@ -29,6 +29,11 @@ spec:
         configMap:
           name: spinnaker-spinnaker-spinnaker-config
           defaultMode: 420
+      volumes:
+      - name: spinnaker-gate-config
+        configMap:
+          name: spinnaker-gate-config
+          defaultMode: 0644
       containers:
       - name: gate
         image: gcr.io/spinnaker-marketplace/gate:0.10.0-20180221133510
@@ -40,6 +45,8 @@ spec:
         volumeMounts:
         - name: spinnaker-spinnaker-spinnaker-config
           mountPath: "/opt/spinnaker/config"
+        - name: spinnaker-gate-config
+          mountPath: "/opt/gate/config"
         livenessProbe:
           httpGet:
             path: "/health"

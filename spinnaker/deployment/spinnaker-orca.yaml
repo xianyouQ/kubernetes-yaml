@@ -32,8 +32,8 @@ spec:
       volumes:
       - name: spinnaker-orca-config
         configMap:
-          name: sspinnaker-orca-config
-          defaultMode: 644
+          name: spinnaker-orca-config
+          defaultMode: 0644
       containers:
       - name: orca
         image: gcr.io/spinnaker-marketplace/orca:0.10.0-20180221133510
