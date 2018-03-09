@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: minio-ingress
+  namespace: spinnaker
+spec:
+  rules:
+  - host: minio.spnnaker.youxian.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: spinnaker-minio-svc
+          servicePort: 9000
