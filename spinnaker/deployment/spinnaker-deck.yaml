@@ -34,7 +34,7 @@ spec:
           protocol: TCP
         env:
         - name: API_HOST
-          value: http://spinnaker-spinnaker-gate:8084/
+          value: http://gate.spinnaker.youxian.com:8084/
         - name: DECK_HOST
           value: 0.0.0.0
         - name: DECK_PORT
