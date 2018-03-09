@@ -17,7 +17,7 @@ data:
     ${providers.kubernetes.primaryCredentials.name}\n  challengeDestructiveActionsEnvironments:
     ${providers.kubernetes.primaryCredentials.name}\n"
   clouddriver.yml: "server:\n  port: ${services.clouddriver.port:7002}\n  address:
-    ${services.clouddriver.host:localhost}\n\nredis:\n  connection: ${services.redis.connection:redis://localhost:6379}\n\nudf:\n
+    ${services.clouddriver.host:localhost}\n\nredis:\n  connection: ${services.redis.connection:redis://redis.spinnaker.youxian.com:6379}\n\nudf:\n
     \ # Controls whether UserDataProviders are used to populate user data of new\n
     \ # server groups. If false, user data is copied over from ancestor server\n  #
     groups on both CopyLastAsgAtomicOperation and\n  # ModifyAsgLaunchConfigurationOperation
@@ -186,7 +186,7 @@ data:
       address: 0.0.0.0
 
     redis:
-      connection: ${services.redis.connection:redis://localhost:6379}
+      connection: ${services.redis.connection:redis://redis.spinnaker.youxian.com:6379}
 
     auth:
       getAll:
@@ -297,7 +297,7 @@ data:
     \ enabled: ${services.jenkins.enabled:false}\n  masters:\n    - name: default\n
     \     address: ${services.jenkins.defaultMaster.baseUrl}\n      username: ${services.jenkins.defaultMaster.username}\n
     \     password: ${services.jenkins.defaultMaster.password}\n\ndockerRegistry:\n
-    \ enabled: true\n\nredis:\n  connection: ${services.redis.connection:redis://localhost:6379}\n
+    \ enabled: true\n\nredis:\n  connection: ${services.redis.connection:redis://redis.spinnaker.youxian.com:6379}\n
     \ \n# Igor depends on Clouddriver and Echo. These are normally configured\n# in
     spinnaker[-local].yml (if present), otherwise, uncomment this.\n# services:\n#
     \  clouddriver:\n#     baseUrl: ${services.clouddriver.baseUrl}\n#   echo:\n#
@@ -327,7 +327,7 @@ data:
       enabled: true
 
     redis:
-      connection: ${services.redis.connection:redis://localhost:6379}
+      connection: ${services.redis.connection:redis://redis.spinnaker.youxian.com:6379}
 
     # Igor depends on Clouddriver and Echo. These are normally configured
     # in spinnaker[-local].yml (if present), otherwise, uncomment this.
@@ -428,7 +428,7 @@ data:
       address: 0.0.0.0
 
     redis:
-      connection: ${services.redis.connection:redis://localhost:6379}
+      connection: ${services.redis.connection:redis://redis.spinnaker.youxian.com:6379}
 
     aws:
       enabled: ${providers.aws.enabled:false}
