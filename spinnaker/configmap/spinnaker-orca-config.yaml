@@ -1,0 +1,93 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: spinnaker-orca-config
+  namespace: spinnaker
+  labels:
+    app: spinnaker-orca
+    chart: orca-0.10.0
+    heritage: Tiller
+    release: spinnaker
+data:
+  orca.yml: |-
+      server:
+        port: 8083
+
+      default:
+        bake:
+          account: default
+
+      front50:
+        enabled: true
+        baseUrl: http://front50.spinnaker.youxian.com
+      tide:
+        baseUrl: http://localhost:8090
+      oort:
+        baseUrl: http://localhost:7002
+      mort:
+        baseUrl: http://localhost:7002
+      kato:
+        baseUrl: http://localhost:7002
+      echo:
+        enabled: yes
+        baseUrl: http://echo.spinnaker.youxian.com
+      igor:
+        enabled: true
+        baseUrl: http://localhost:8088
+      bakery:
+        enabled: true
+        baseUrl: http://localhost:8089
+        # Rosco exposes more endpoints than Netflix's internal bakery. This disables
+        # the use of those endpoints.
+        roscoApisEnabled: true
+        allowMissingPackageInstallation: false
+
+      redis:
+        connection: ${REDIS_URL:redis://redis.spinnaker.youxian.com:6379}
+
+      keiko:
+        queue:
+          redis:
+            queueName: orca.task.queue
+            deadLetterQueueName: orca.task.deadLetterQueue
+
+      tasks:
+        useWaitForAllNetflixAWSInstancesDownTask: false
+
+      logging:
+        config: classpath:logback-defaults.xml
+
+      # This configuration lets you configure Webhook stages that will appear as native stages in the Deck UI.
+      # Properties that are set here will not be displayed in the GUI
+      #webhook:
+      #  preconfigured:
+      #    - label: Some Webhook
+      #      description: This is a webhook stage, but it appears as a native stage in Spinnaker
+      #      type: customWebhook # Should be unique
+      #      # The following properties are all optional:
+      #      enabled: true # default true
+      #      url: https://my.webhook.com/event
+      #      headers:
+      #        Accept:
+      #          - application/json
+      #        AnotherHeader:
+      #          - valueOne
+      #          - valueTwo
+      #      method: POST
+      #      payload: |
+      #        {
+      #          "text": "Version ${trigger.buildInfo.artifacts[0].version} deployed"
+      #        }
+      #      waitForCompletion: true
+      #      # The rest of the properties are only used if waitForCompletion == true
+      #      statusUrlResolution: webhookResponse # getMethod, locationHeader, webhookResponse
+      #      statusUrlJsonPath: $.statusUrl # Only used if statusUrlResolution == webhookResponse
+      #      statusJsonPath: $.status
+      #      progressJsonPath: $.progress
+      #      successStatuses: SUCCESS,COMPLETED
+      #      canceledStatuses: CANCELED
+      #      terminalStatuses: TERMINATED
+      #    - label: Another Webhook
+      #      description: This is also a webhook stage, but it has no properties set
+      #      type: anotherCustomWebhook
+      #      enabled: false

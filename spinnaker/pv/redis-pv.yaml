@@ -3,8 +3,6 @@ kind: PersistentVolume
 apiVersion: v1
 metadata:
   name: redis-pv
-  annotations:
-    pv.kubernetes.io/bound-by-controller: 'yes'
 spec:
   capacity:
     storage: 8Gi
@@ -12,12 +10,5 @@ spec:
     path: "/home/redis"
     type: ''
   accessModes:
-  - ReadWriteOnce
-  claimRef:
-    kind: PersistentVolumeClaim
-    namespace: spinnaker
-    name: spinnaker-redis
-    uid: 95b79830-2346-11e8-baf7-06dec40001b5
-    apiVersion: v1
-    resourceVersion: '143633'
+  - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain

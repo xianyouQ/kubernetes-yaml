@@ -14,7 +14,7 @@ metadata:
     pv.kubernetes.io/bound-by-controller: 'yes'
 spec:
   accessModes:
-  - ReadWriteOnce
+  - ReadWriteMany
   resources:
     requests:
       storage: 8Gi
