@@ -683,7 +683,7 @@ data:
             token: 
 
       deck:
-        host: deck.spinnaker.youxian.com
+        host: spinnaker.youxian.com
         port: 80
         baseUrl: ${services.default.protocol}://${services.deck.host}:${services.deck.port}
         gateUrl: ${services.gate.baseUrl}
@@ -705,16 +705,16 @@ data:
         cassandra:
           enabled: false
         redis:
-          enabled: false
+          enabled: true
         
         gcs:
           enabled: false
         s3:
-          enabled: true
+          enabled: false
           endpoint: http://minio.spinnaker.youxian.com
         
       gate:
-        host: gate.spinnaker.youxian.com
+        host: spinnaker.youxian.com
         port: 80
         baseUrl: ${services.default.protocol}://${services.gate.host}:${services.gate.port}/gate
 
