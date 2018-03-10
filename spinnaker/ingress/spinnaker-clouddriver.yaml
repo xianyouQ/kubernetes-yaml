@@ -5,7 +5,7 @@ metadata:
   namespace: spinnaker
 spec:
   rules:
-  - host: clouddriver.spnnaker.youxian.com
+  - host: clouddriver.spinnaker.youxian.com
     http:
       paths:
       - path: /
