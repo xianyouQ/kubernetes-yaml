@@ -5,7 +5,7 @@ metadata:
   namespace: spinnaker
 spec:
   rules:
-  - host: deck.spinnaker.youxian.com
+  - host: spinnaker.youxian.com
     http:
       paths:
       - path: /
