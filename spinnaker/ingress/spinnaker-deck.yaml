@@ -11,4 +11,4 @@ spec:
       - path: /
         backend:
           serviceName: spinnaker-spinnaker-deck
-          servicePort: 7002
+          servicePort: 9000
