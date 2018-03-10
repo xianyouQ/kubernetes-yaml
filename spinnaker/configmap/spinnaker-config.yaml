@@ -9,7 +9,7 @@ metadata:
 data:
   clouddriver-local.yml: |-
     server:
-      port: ${services.clouddriver.port:7002}
+      port: 7002
       address: 0.0.0.0
 
     default:
@@ -42,8 +42,8 @@ data:
 
   clouddriver.yml: |-
     server:
-      port: ${services.clouddriver.port:7002}
-      address: ${services.clouddriver.host:localhost}
+      port: 7002
+      address: 0.0.0.0
 
     redis:
       connection: ${services.redis.connection:redis://redis.spinnaker.youxian.com:6379}
@@ -130,7 +130,7 @@ data:
       challengeDestructiveActionsEnvironments: ${providers.aws.primaryCredentials.name}, ${providers.google.primaryCredentials.name}, ${providers.cf.primaryCredentials.name}, ${providers.azure.primaryCredentials.name}
   echo-local.yml: |
     server:
-      port: ${services.echo.port:8089}
+      port: 8089
       address: 0.0.0.0
 
     cassandra:
@@ -193,7 +193,7 @@ data:
         pollingIntervalMs: 30000
   echo.yml: |
     server:
-      port: ${services.echo.port:8089}
+      port: 8089
       address: 0.0.0.0
 
     cassandra:
@@ -260,7 +260,7 @@ data:
         timezone: ${services.echo.cron.timezone}
   fiat.yml: |
     server:
-      port: ${services.fiat.port:7003}
+      port: 7003
       address: 0.0.0.0
 
     redis:
@@ -272,7 +272,7 @@ data:
   fiat.yml-local: ''
   front50-local.yml: |
     server:
-      port: ${services.front50.port:8080}
+      port: 8080
       address: 0.0.0.0
 
     aws:
@@ -300,7 +300,7 @@ data:
         endpoint: ${services.front50.s3.endpoint}
   front50.yml: |
     server:
-      port: ${services.front50.port:8080}
+      port: 8080
       address: ${services.front50.host:localhost}
 
     cassandra:
@@ -340,7 +340,7 @@ data:
         endpoint: ${services.front50.s3.endpoint:}
   gate.yml: |
     server:
-      port: ${services.gate.port:8084}
+      port: 8084
       address: 0.0.0.0
       # ssl:
       #   enabled: false
@@ -373,7 +373,7 @@ data:
       connection: ${services.redis.connection}
   igor-local.yml: |
     server:
-      port: ${services.igor.port:8088}
+      port: 8088
       address: 0.0.0.0
 
     jenkins:
@@ -399,7 +399,7 @@ data:
     #     baseUrl: ${services.echo.baseUrl}
   igor.yml: |
     server:
-      port: ${services.igor.port:8088}
+      port: 8088
       address: 0.0.0.0
 
     jenkins:
@@ -433,7 +433,7 @@ data:
     #     baseUrl: ${services.echo.baseUrl}
   orca-local.yml: |
     server:
-        port: ${services.orca.port:8083}
+        port: 8083
         address: 0.0.0.0
 
     oort:
@@ -473,7 +473,7 @@ data:
       job: run-script # from Jenkins job configuration
   orca.yml: |
     server:
-        port: ${services.orca.port:8083}
+        port: 8083
         address: 0.0.0.0
 
     oort:
@@ -519,7 +519,7 @@ data:
       job: run-script # from Jenkins job configuration
   rosco-local.yml: |
     server:
-      port: ${services.rosco.port:8087}
+      port: 8087
       address: 0.0.0.0
 
     redis:
@@ -547,7 +547,7 @@ data:
       configDir: ${services.rosco.configDir}
   rosco.yml: |
     server:
-      port: ${services.rosco.port:8087}
+      port: 8087
       address: 0.0.0.0
 
     redis:
