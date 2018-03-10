@@ -829,7 +829,7 @@ data:
 
       clouddriver:
         host: ${services.default.host}
-        port: 7002
+        port: 80
         baseUrl: ${services.default.protocol}://${services.clouddriver.host}:${services.clouddriver.port}
         aws:
           udf:
@@ -843,7 +843,7 @@ data:
       echo:
         enabled: true
         host: ${services.default.host}
-        port: 8089
+        port: 80
         baseUrl: ${services.default.protocol}://${services.echo.host}:${services.echo.port}
 
         cron:
@@ -879,7 +879,7 @@ data:
 
       deck:
         host: ${services.default.host}
-        port: 9000
+        port: 80
         baseUrl: ${services.default.protocol}://${services.deck.host}:${services.deck.port}
         gateUrl: ${services.gate.baseUrl}
         bakeryUrl: ${services.bakery.baseUrl}
@@ -890,12 +890,12 @@ data:
       fiat:
         enabled: false
         host: ${services.default.host}
-        port: 7003
+        port: 80
         baseUrl: ${services.default.protocol}://${services.fiat.host}:${services.fiat.port}
 
       front50:
         host: ${services.default.host}
-        port: 8080
+        port: 80
         baseUrl: ${services.default.protocol}://${services.front50.host}:${services.front50.port}
 
         # If using storage bucket persistence (gcs or s3), specify the bucket here
@@ -918,7 +918,7 @@ data:
 
       gate:
         host: ${services.default.host}
-        port: 8084
+        port: 80
         baseUrl: ${services.default.protocol}://${services.gate.host}:${services.gate.port}
 
       igor:
@@ -926,7 +926,7 @@ data:
         # "igor" subsystem.
         enabled: false
         host: ${services.default.host}
-        port: 8088
+        port: 80
         baseUrl: ${services.default.protocol}://${services.igor.host}:${services.igor.port}
 
       kato:
@@ -941,7 +941,7 @@ data:
 
       orca:
         host: ${services.default.host}
-        port: 8083
+        port: 80
         baseUrl: ${services.default.protocol}://${services.orca.host}:${services.orca.port}
         timezone: ${global.spinnaker.timezone}
         enabled: true
@@ -953,7 +953,7 @@ data:
 
       rosco:
         host: ${services.default.host}
-        port: 8087
+        port: 80
         baseUrl: ${services.default.protocol}://${services.rosco.host}:${services.rosco.port}
         # You need to provide the fully-qualified path to the directory containing the packer templates.
         # They typically live in rosco's config/packer directory.
