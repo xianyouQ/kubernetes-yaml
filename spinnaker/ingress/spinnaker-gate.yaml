@@ -5,10 +5,10 @@ metadata:
   namespace: spinnaker
 spec:
   rules:
-  - host: spinnaker.youxian.com
+  - host: gate.spinnaker.youxian.com
     http:
       paths:
-      - path: /gate
+      - path: /
         backend:
           serviceName: spinnaker-spinnaker-gate
           servicePort: 8084
