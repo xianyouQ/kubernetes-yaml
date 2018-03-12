@@ -714,9 +714,9 @@ data:
           endpoint: http://minio.spinnaker.youxian.com
         
       gate:
-        host: gate.spinnaker.youxian.com
+        host: spinnaker.youxian.com
         port: 80
-        baseUrl: ${services.default.protocol}://${services.gate.host}:${services.gate.port}
+        baseUrl: ${services.default.protocol}://${services.gate.host}:${services.gate.port}/gate
 
       igor:
         # If you are integrating Jenkins then you must also enable Spinnaker's
