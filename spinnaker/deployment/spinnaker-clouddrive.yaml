@@ -25,10 +25,6 @@ spec:
         configMap:
           name: spinnaker-spinnaker-spinnaker-config
           defaultMode: 420
-      - name: spinnaker-kubeapi-config
-        configMap:
-          name: spinnaker-kubeapi-config
-          defaultMode: 420
       - name: spinnaker-spinnaker-registry
         secret:
           secretName: spinnaker-spinnaker-registry
@@ -47,8 +43,6 @@ spec:
         resources: {}
         volumeMounts:
         - name: spinnaker-spinnaker-spinnaker-config
-          mountPath: "/opt/spinnaker/config"
-        - name: spinnaker-kubeapi-config
           mountPath: "/opt/spinnaker/config"
         - name: spinnaker-spinnaker-registry
           mountPath: "/tmp/registry"

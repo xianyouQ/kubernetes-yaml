@@ -33,10 +33,6 @@ spec:
         configMap:
           name: spinnaker-gate-config
           defaultMode: 0644
-      - name: spinnaker-kubeapi-config
-        configMap:
-          name: spinnaker-kubeapi-config
-          defaultMode: 420
       containers:
       - name: gate
         image: gcr.io/spinnaker-marketplace/gate:0.10.0-20180221133510
@@ -47,8 +43,6 @@ spec:
         resources: {}
         volumeMounts:
         - name: spinnaker-spinnaker-spinnaker-config
-          mountPath: "/opt/spinnaker/config"
-        - name: spinnaker-kubeapi-config
           mountPath: "/opt/spinnaker/config"
         - name: spinnaker-gate-config
           mountPath: "/opt/gate/config"
