@@ -290,6 +290,8 @@ data:
         enabled: false
       redis:
         enabled: true
+        host: redis.spinnaker.youxian.com
+        port: 6379
       gcs:
         enabled: ${services.front50.gcs.enabled}
         project: ${services.front50.gcs.project}
