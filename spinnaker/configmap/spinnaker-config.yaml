@@ -712,7 +712,6 @@ data:
 
         cassandra:
           enabled: false
-          enabled: false
           embedded: false
           cluster: CASS_SPINNAKER
           keyspace: front50
@@ -721,6 +720,8 @@ data:
           port: 9042
         redis:
           enabled: true
+          host: redis.spinnaker.youxian.com
+          port: 6379
         
         gcs:
           enabled: false
@@ -930,7 +931,7 @@ data:
         cassandra:
           enabled: false
         redis:
-          enabled: false
+          enabled: true
         gcs:
           enabled: ${services.front50.gcs.enabled} # Enable me
           project: ${services.front50.gcs.project}
