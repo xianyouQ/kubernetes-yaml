@@ -1085,3 +1085,17 @@ data:
           name: ${providers.dockerRegistry.primaryCredentials.name}
           address: ${providers.dockerRegistry.primaryCredentials.address}
           repository: ${providers.dockerRegistry.primaryCredentials.repository}
+  kube_config.yaml: |-
+    apiVersion: v1
+    clusters:
+    - cluster:
+        server: http://kube-api.youxian.com:8080
+      name: yxq-cluster
+    contexts:
+    - context:
+        cluster:  yxq-cluster
+        namespace: default
+      name: yxq-context
+    current-context: online-context
+    kind: Config
+    preferences: {}
