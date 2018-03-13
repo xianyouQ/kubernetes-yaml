@@ -25,9 +25,9 @@ spec:
         configMap:
           name: spinnaker-spinnaker-spinnaker-config
           defaultMode: 420
-      - name: spinnaker-spinnaker-s3-config
+      - name: spinnaker-front50-config
         configMap:
-          name: spinnaker-spinnaker-s3-config
+          name: spinnaker-front50-config
           defaultMode: 420
       containers:
       - name: front50
@@ -40,8 +40,8 @@ spec:
         volumeMounts:
         - name: spinnaker-spinnaker-spinnaker-config
           mountPath: "/opt/spinnaker/config"
-        - name: spinnaker-spinnaker-s3-config
-          mountPath: "/root/.aws"
+        - name: spinnaker-front50-config
+          mountPath: "/opt/front50/config"
         readinessProbe:
           httpGet:
             path: "/health"

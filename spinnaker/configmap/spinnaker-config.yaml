@@ -119,16 +119,16 @@ data:
           
 
     dockerRegistry:
-      
-      enabled: false
+      enabled: true
       accounts:
-        - name: dockerhub
-          address: https://index.docker.io
-          repositories:
-            - library/alpine
-            - library/ubuntu
-            - library/centos
-            - library/nginx
+        - name: spinnaker
+          address: http://registry.youxian.com
+          sortTagsByDate: false
+          trackDigests: false
+          insecureRegistry: false
+          repositories: []
+          username: admin
+          password: Harbor12345
       
 
     credentials:
