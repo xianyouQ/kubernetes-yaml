@@ -1096,6 +1096,6 @@ data:
         cluster:  yxq-cluster
         namespace: default
       name: yxq-context
-    current-context: online-context
+    current-context: yxq-context
     kind: Config
     preferences: {}
