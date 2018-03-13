@@ -25,6 +25,10 @@ spec:
         configMap:
           name: spinnaker-spinnaker-spinnaker-config
           defaultMode: 420
+      - name: spinnaker-kubeapi-config
+        configMap:
+          name: spinnaker-kubeapi-config
+          defaultMode: 420
       containers:
       - name: deck
         image: gcr.io/spinnaker-marketplace/deck:2.1.0-20180221143146
@@ -42,6 +46,8 @@ spec:
         resources: {}
         volumeMounts:
         - name: spinnaker-spinnaker-spinnaker-config
+          mountPath: "/opt/spinnaker/config"
+        - name: spinnaker-kubeapi-config
           mountPath: "/opt/spinnaker/config"
         terminationMessagePath: "/dev/termination-log"
         terminationMessagePolicy: File

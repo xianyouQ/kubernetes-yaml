@@ -268,7 +268,7 @@ data:
             pollInterval: ${OS_LBAAS_POLL_INTERVAL:5}
 
     kubernetes:
-      enabled: false
+      enabled: true
 
     dockerRegistry:
       enabled: ${DOCKER_REGISTRY_ENABLED:false}

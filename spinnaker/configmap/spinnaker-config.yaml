@@ -19,22 +19,25 @@ data:
     kubernetes:
       enabled: true
       accounts:
-        - name: local
-          serviceAccount: true
+        - name: yxq-cluster
+          context: yxq-context
           dockerRegistries:
-            - accountName: dockerhub
+            - accountName: spinnaker
+          namespaces: []
+          omitNamespaces: []
+          kubeconfigFile: /opt/spinnaker/config/kube_config.yaml
+
+
+
 
     dockerRegistry:
-      enabled: false
+      enabled: true
       accounts:
-        - name: dockerhub
-          address: https://index.docker.io
+        - name: spinnaker
+          address: http://registry.youxian.com
           
-          repositories:
-            - library/alpine
-            - library/ubuntu
-            - library/centos
-            - library/nginx
+          repositories: []
+    primaryAccount: spinnaker
           
     credentials:
       primaryAccountTypes: ${providers.kubernetes.primaryCredentials.name}
@@ -286,7 +289,7 @@ data:
       cassandra:
         enabled: false
       redis:
-        enabled: false
+        enabled: true
       gcs:
         enabled: ${services.front50.gcs.enabled}
         project: ${services.front50.gcs.project}
@@ -792,17 +795,24 @@ data:
 
       kubernetes:
         enabled: true
-        primaryCredentials:
-          name: local
-          namespace: default
-          dockerRegistryAccount: dockerhub
+        accounts:
+          - name: yxq-cluster
+            context: yxq-context
+            dockerRegistries:
+              - accountName: spinnaker
+            namespaces: []
+            omitNamespaces: []
+            kubeconfigFile: /opt/spinnaker/config/kube_config.yaml
+
+
+
 
       dockerRegistry:
-        enabled: false
-        primaryCredentials:
-          name: dockerhub
-          address: https://index.docker.io
-          repository: vic-goog/gceme
+        enabled: true
+        accounts:
+          - name: spinnaker
+            address: http://registry.youxian.com    
+            repositories: []
   spinnaker.yml: |-
 
     # This file is intended to serve as a master configuration for a Spinnaker

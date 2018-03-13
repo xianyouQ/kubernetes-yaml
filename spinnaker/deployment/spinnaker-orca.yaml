@@ -34,6 +34,10 @@ spec:
         configMap:
           name: spinnaker-orca-config
           defaultMode: 0644
+      - name: spinnaker-kubeapi-config
+        configMap:
+          name: spinnaker-kubeapi-config
+          defaultMode: 420
       containers:
       - name: orca
         image: gcr.io/spinnaker-marketplace/orca:0.10.0-20180221133510
@@ -44,6 +48,8 @@ spec:
         resources: {}
         volumeMounts:
         - name: spinnaker-spinnaker-spinnaker-config
+          mountPath: "/opt/spinnaker/config"
+        - name: spinnaker-kubeapi-config
           mountPath: "/opt/spinnaker/config"
         volumeMounts:
         - name: spinnaker-orca-config

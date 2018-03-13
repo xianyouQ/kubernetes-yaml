@@ -29,6 +29,10 @@ spec:
         configMap:
           name: spinnaker-spinnaker-spinnaker-config
           defaultMode: 420
+      - name: spinnaker-kubeapi-config
+        configMap:
+          name: spinnaker-kubeapi-config
+          defaultMode: 420
       containers:
       - name: igor
         image: gcr.io/spinnaker-marketplace/igor:0.9.0-20180221133510
@@ -39,6 +43,8 @@ spec:
         resources: {}
         volumeMounts:
         - name: spinnaker-spinnaker-spinnaker-config
+          mountPath: "/opt/spinnaker/config"
+        - name: spinnaker-kubeapi-config
           mountPath: "/opt/spinnaker/config"
         readinessProbe:
           httpGet:
