@@ -711,7 +711,7 @@ data:
         bucket_root: front50
 
         cassandra:
-          enabled: true
+          enabled: false
           enabled: false
           embedded: false
           cluster: CASS_SPINNAKER
@@ -720,7 +720,7 @@ data:
           host: cassandra.spinnaker.youxian.com
           port: 9042
         redis:
-          enabled: false
+          enabled: true
         
         gcs:
           enabled: false
