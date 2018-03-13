@@ -35,9 +35,12 @@ data:
       accounts:
         - name: spinnaker
           address: http://registry.youxian.com
-          
+          sortTagsByDate: false
+          trackDigests: false
+          insecureRegistry: false
           repositories: []
-    primaryAccount: spinnaker
+          username: admin
+          password: Harbor12345
           
     credentials:
       primaryAccountTypes: ${providers.kubernetes.primaryCredentials.name}
@@ -708,9 +711,16 @@ data:
         bucket_root: front50
 
         cassandra:
-          enabled: false
-        redis:
           enabled: true
+          enabled: false
+          embedded: false
+          cluster: CASS_SPINNAKER
+          keyspace: front50
+          name: global
+          host: cassandra.spinnaker.youxian.com
+          port: 9042
+        redis:
+          enabled: false
         
         gcs:
           enabled: false
