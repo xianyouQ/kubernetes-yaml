@@ -289,7 +289,9 @@ data:
       enabled: true
       host: cassandra.spinnaker.youxian.com
       port: 9042
-
+      keyspace: front50
+      name: global
+      embedded: true
     spinnaker:
       cassandra:
         enabled: false
@@ -716,8 +718,11 @@ data:
           enabled: true
           host: cassandra.spinnaker.youxian.com
           port: 9042
+          keyspace: front50
+          name: global
+          embedded: true
         redis:
-          enabled: false
+          enabled: true
           host: redis.spinnaker.youxian.com
           port: 6379
         
@@ -801,7 +806,12 @@ data:
         host: redis.spinnaker.youxian.com
         port: 6379
         connection: redis://${services.redis.host}:${services.redis.port}
-
+      cassandra:
+        host: cassandra.spinnaker.youxian.com
+        port: 9042
+        keyspace: front50
+        name: global
+        embedded: true
     providers:
 
       kubernetes:
@@ -815,15 +825,17 @@ data:
             omitNamespaces: []
             kubeconfigFile: /opt/spinnaker/config/kube_config.yaml
 
-
-
-
       dockerRegistry:
         enabled: true
         accounts:
           - name: spinnaker
-            address: http://registry.youxian.com    
+            address: http://registry.youxian.com
+            sortTagsByDate: false
+            trackDigests: false
+            insecureRegistry: false
             repositories: []
+            username: admin
+            password: Harbor12345
   spinnaker.yml: |-
 
     # This file is intended to serve as a master configuration for a Spinnaker
