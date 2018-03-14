@@ -286,7 +286,7 @@ data:
       defaultSimpleDBDomain: ${providers.aws.defaultSimpleDBDomain}
 
     cassandra:
-      enabled: true
+      enabled: false
       host: cassandra.spinnaker.youxian.com
       port: 9042
       keyspace: front50
@@ -715,14 +715,14 @@ data:
         bucket_root: front50
 
         cassandra:
-          enabled: true
+          enabled: false
           host: cassandra.spinnaker.youxian.com
           port: 9042
           keyspace: front50
           name: global
           embedded: true
         redis:
-          enabled: true
+          enabled: false
           host: redis.spinnaker.youxian.com
           port: 6379
         
@@ -939,7 +939,7 @@ data:
         bucket_root: front50
 
         cassandra:
-          enabled: true
+          enabled: false
         redis:
           enabled: true
         gcs:
