@@ -729,7 +729,7 @@ data:
         gcs:
           enabled: false
         s3:
-          enabled: false
+          enabled: true
           endpoint: http://minio.spinnaker.youxian.com
         
       gate:
